@@ -1,0 +1,133 @@
+{
+  "@@locale": "ky",
+
+  "errorNetwork": "Интернет туташуусун текшериңиз",
+  "@errorNetwork": { "description": "Тармак катасы" },
+
+  "errorConnectionTimeout": "Туташуу убактысы өттү",
+  "@errorConnectionTimeout": { "description": "Таймаут" },
+
+  "errorUnauthorized": "Авторизация талап кылынат",
+  "@errorUnauthorized": { "description": "Авторизацияланган эмес" },
+
+  "errorTokenExpired": "Сессия аяктады, кайра кириңиз",
+  "@errorTokenExpired": { "description": "Токен мөөнөтү өттү" },
+
+  "errorServer": "Сервер катасы, кийинчерээк аракет кылыңыз",
+  "@errorServer": { "description": "500 Server Error" },
+
+  "errorNotFound": "Ресурс табылган жок",
+  "@errorNotFound": { "description": "404 Not Found" },
+
+  "errorValidation": "Маалыматтардын туруктуулугун текшериңиз",
+  "@errorValidation": { "description": "Валидация катасы" },
+
+  "errorNoContent": "Мазмун табылган жок",
+  "@errorNoContent": { "description": "204 No Content" },
+
+  "errorUnknown": "Белгисиз ката",
+  "@errorUnknown": { "description": "Белгисиз ката" },
+
+  
+  "navHome": "Башкы бет",
+"navFeed": "Түрмөк",
+"navAnalysis": "Талдоо",
+"navProfile": "Профиль",
+
+
+"homeTests": "Тесттер ",
+"appName": "Synamyk",
+"ortTitle": "ОРТ",
+"ortDescription": "ОРТ — Кыргызстандын университеттерине түшүүдө эске алынуучу кириш экзамени.",
+"profileTitle": "Профиль",
+"points": "упай",
+"score": "балл",
+"rating": "рейтинг",
+"editProfile": "Профилди өзгөртүү",
+"settingsData": "Маалымат жөндөөлөрү",
+"settingsLanguage": "Интерфейс тили",
+"next": "Кийинки",
+"skipQuestion": "Суроону өткөрүп жибер",
+"levelOne": "1-деңгээл",
+"calculationSum": "Суммаларды эсептөө",
+"yourResult": "Сиздин натыйжаңыз",
+"resultSuccessMessage": "Мыкты! Сен чыныгы математика билермансың!",
+"correctAnswers": "туура жооп",
+"testLabel": "тест",
+"timeLabel": "убакыт",
+"viewErrors": "Жооптордогу каталарды көрүү.",
+"zeroMinutes": "0 мүнөт", 
+
+
+"freeLevel": "Акысыз деңгээл",
+"minutes": "{count} мүнөт",
+"questions": "{count} суроо",
+"subjectUnavailable": "Предмет убактылуу жеткиликсиз", 
+
+
+"periodWeek": "Апта",
+"periodMonth": "Ай",
+"periodYear": "Жыл",
+"periodSixMonths": "Алты ай",
+"periodThreeMonths": "Үч ай",
+"totalScore": "Жалпы балл",
+"analystError": "Ката: {message}", 
+
+
+"tabAnalytics": "Аналитика графиги",
+"tabVideoLessons": "Видео сабактар", 
+
+
+"selectOption": "Параметрди тандаңыз", 
+
+
+"newsDetails": "Жаңылыктын чоо-жайы", 
+
+
+"aiAnalysis": "ЖИ Талдоосу",
+"questionNumber": "{number}-суроо",
+"yourAnswer": "Сиздин жообуңуз:",
+"correctAnswer": "Туура жооп:",
+"aiExplanation": "ЖИ түшүндүрмөсү:", 
+
+
+"analyzeWithAi": "ЖИ аркылуу талдоо",
+"results": "Натыйжалар",
+"correctAnswersOf": "{total} дон {correct}", 
+
+
+"exitTestTitle": "Тестти токтотосузбу?",
+"exitTestMessage": "Чынында эле тестти токтоткуңуз келеби?",
+"exitTestConfirm": "Ооба, токтотом",
+"exitTestCancel": "Жок", 
+
+
+"changePassword": "Сырсөздү өзгөртүү",
+"oldPassword": "Эски сырсөз",
+"newPassword": "Жаңы сырсөз",
+"confirmNewPassword": "Жаңы сырсөздү ырастаңыз",
+"saveData": "Сактоо",
+"passwordChanged": "Сырсөз ийгиликтүү өзгөртүлдү",
+"errorOccurred": "Ката кетти",
+
+"changePhone": "Телефон номерин өзгөртүү",
+"oldPhone": "Эски телефон номери",
+"newPhone": "Жаңы телефон номери", 
+
+
+"changeRegion": "Регионду өзгөртүү",
+"region": "Регион",
+"regionChanged": "Регион ийгиликтүү өзгөртүлдү", 
+
+
+"langRussian": "Русский",
+"langEnglish": "English",
+"langKyrgyz": "Кыргызча", 
+
+
+"firstName": "Аты",
+"lastName": "Фамилиясы",
+"description": "Сүрөттөмө",
+"deleteAccount": "Аккаунтту жок кылуу", 
+"deleteAccountMessage": "Чынында эле аккаунтуңузду жок кылгыңыз келеби?"
+}

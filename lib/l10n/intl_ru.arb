@@ -1,0 +1,298 @@
+{
+  "@@locale": "ru",
+ 
+  "errorNetwork": "Проверьте подключение к интернету",
+  "@errorNetwork": { "description": "Ошибка сети" },
+ 
+  "errorConnectionTimeout": "Превышено время ожидания",
+  "@errorConnectionTimeout": { "description": "Таймаут соединения" },
+ 
+  "errorUnauthorized": "Необходима авторизация",
+  "@errorUnauthorized": { "description": "Не авторизован" },
+ 
+  "errorTokenExpired": "Сессия истекла, войдите снова",
+  "@errorTokenExpired": { "description": "Токен протух" },
+ 
+  "errorServer": "Ошибка сервера, попробуйте позже",
+  "@errorServer": { "description": "500 Internal Server Error" },
+ 
+  "errorNotFound": "Ресурс не найден",
+  "@errorNotFound": { "description": "404 Not Found" },
+ 
+  "errorValidation": "Проверьте правильность данных",
+  "@errorValidation": { "description": "Ошибка валидации" },
+ 
+  "errorNoContent": "Контент не найден",
+  "@errorNoContent": { "description": "204 No Content" },
+ 
+  "errorUnknown": "Неизвестная ошибка",
+  "@errorUnknown": { "description": "Неизвестная ошибка" },
+
+  
+  "navHome": "Главная",
+"@navHome": { "description": "Нижняя навигация — Главная" },
+
+"navFeed": "Лента",
+"@navFeed": { "description": "Нижняя навигация — Лента" },
+
+"navAnalysis": "Анализ",
+"@navAnalysis": { "description": "Нижняя навигация — Анализ" },
+
+"navProfile": "Профиль",
+"@navProfile": { "description": "Нижняя навигация — Профиль" },
+
+
+"homeTests": "Тесты ",
+"@homeTests": { "description": "Заголовок главной страницы" },
+
+"appName": "Synamyk",
+"@appName": { "description": "Название приложения" },
+
+"ortTitle": "ОРТ",
+"@ortTitle": { "description": "Название экзамена" },
+
+"ortDescription": "ОРТ — это вступительный экзамен, результаты которого учитываются при поступлении в университеты Кыргызстана.",
+"@ortDescription": { "description": "Описание ОРТ" },
+
+"profileTitle": "Профиль",
+"@profileTitle": { "description": "Заголовок страницы профиля" },
+
+"points": "очков",
+"@points": { "description": "Очки" },
+
+"score": "балла",
+"@score": { "description": "Баллы" },
+
+"rating": "рейтинг",
+"@rating": { "description": "Рейтинг" },
+
+"editProfile": "Редактировать профиль",
+"@editProfile": { "description": "Кнопка редактирования профиля" },
+
+"settingsData": "Настройка данных",
+"@settingsData": { "description": "Настройки данных" },
+
+"settingsLanguage": "Язык интерфейса",
+"@settingsLanguage": { "description": "Настройка языка" },
+
+"next": "Следующий",
+"@next": { "description": "Кнопка следующий" },
+
+"skipQuestion": "Пропустить вопрос",
+"@skipQuestion": { "description": "Кнопка пропуска вопроса" },
+
+"levelOne": "1-уровень",
+"@levelOne": { "description": "Первый уровень" },
+
+"calculationSum": "Вычисление суммы",
+"@calculationSum": { "description": "Тип задания" },
+
+"yourResult": "Ваш результат",
+"@yourResult": { "description": "Результат теста" },
+
+"resultSuccessMessage": "Отлично! Ты настоящий знаток математики!",
+"@resultSuccessMessage": { "description": "Сообщение об успехе" },
+
+"correctAnswers": "правильных ответов",
+"@correctAnswers": { "description": "Правильные ответы" },
+
+"testLabel": "тест",
+"@testLabel": { "description": "Лейбл теста" },
+
+"timeLabel": "время",
+"@timeLabel": { "description": "Лейбл времени" },
+
+"viewErrors": "Просмотр ошибок в ответах.",
+"@viewErrors": { "description": "Кнопка просмотра ошибок" },
+
+"zeroMinutes": "0 минут",
+"@zeroMinutes": { "description": "Ноль минут" }, 
+
+
+"freeLevel": "Бесплатный уровень",
+"@freeLevel": { "description": "Лейбл бесплатного теста" },
+
+"minutes": "{count} минут",
+"@minutes": {
+  "description": "Количество минут",
+  "placeholders": {
+    "count": { "type": "int" }
+  }
+},
+
+"questions": "{count} вопросов",
+"@questions": {
+  "description": "Количество вопросов",
+  "placeholders": {
+    "count": { "type": "int" }
+  }
+},
+
+"subjectUnavailable": "Предмет временно недоступен",
+"@subjectUnavailable": { "description": "Ошибка загрузки предмета" }, 
+
+
+"periodWeek": "Неделя",
+"@periodWeek": { "description": "Период — неделя" },
+
+"periodMonth": "Месяц",
+"@periodMonth": { "description": "Период — месяц" },
+
+"periodYear": "Год",
+"@periodYear": { "description": "Период — год" },
+
+"periodSixMonths": "Шесть месяцев",
+"@periodSixMonths": { "description": "Период — шесть месяцев" },
+
+"periodThreeMonths": "Три месяца",
+"@periodThreeMonths": { "description": "Период — три месяца" },
+
+"totalScore": "Общий балл",
+"@totalScore": { "description": "Общий балл аналитики" },
+
+"analystError": "Ошибка: {message}",
+"@analystError": {
+  "description": "Ошибка на странице аналитики",
+  "placeholders": {
+    "message": { "type": "String" }
+  }
+}, 
+
+
+"tabAnalytics": "График аналитики",
+"@tabAnalytics": { "description": "Таб — график аналитики" },
+
+"tabVideoLessons": "Видео уроки",
+"@tabVideoLessons": { "description": "Таб — видео уроки" }, 
+
+
+"selectOption": "Выберите опцию",
+"@selectOption": { "description": "Плейсхолдер выбора опции" }, 
+
+
+"newsDetails": "Детали новости",
+"@newsDetails": { "description": "Заголовок страницы новости" }, 
+
+
+"aiAnalysis": "Анализ ИИ",
+"@aiAnalysis": { "description": "Заголовок страницы ИИ анализа" },
+
+"questionNumber": "Вопрос {number}",
+"@questionNumber": {
+  "description": "Номер вопроса",
+  "placeholders": {
+    "number": { "type": "int" }
+  }
+},
+
+"yourAnswer": "Ваш ответ:",
+"@yourAnswer": { "description": "Лейбл ответа пользователя" },
+
+"correctAnswer": "Правильный ответ:",
+"@correctAnswer": { "description": "Лейбл правильного ответа" },
+
+"aiExplanation": "Объяснение ИИ:",
+"@aiExplanation": { "description": "Лейбл объяснения ИИ" }, 
+
+
+"analyzeWithAi": "Анализ при помощи ИИ",
+"@analyzeWithAi": { "description": "Кнопка анализа через ИИ" },
+
+"results": "Результаты",
+"@results": { "description": "Заголовок результатов" },
+
+"correctAnswersOf": "{correct} из {total}",
+"@correctAnswersOf": {
+  "description": "Правильных ответов из total",
+  "placeholders": {
+    "correct": { "type": "int" },
+    "total": { "type": "int" }
+  }
+}, 
+
+
+
+"exitTestTitle": "Прервать тест?",
+"@exitTestTitle": { "description": "Заголовок модала выхода из теста" },
+
+"exitTestMessage": "Вы уверены, что хотите прервать тест?",
+"@exitTestMessage": { "description": "Сообщение модала выхода из теста" },
+
+"exitTestConfirm": "Да, хочу",
+"@exitTestConfirm": { "description": "Кнопка подтверждения выхода" },
+
+"exitTestCancel": "Нет",
+"@exitTestCancel": { "description": "Кнопка отмены выхода" }, 
+
+
+
+"changePassword": "Изменить пароль",
+"@changePassword": { "description": "Заголовок модала смены пароля" },
+
+"oldPassword": "Старый пароль",
+"@oldPassword": { "description": "Поле старого пароля" },
+
+"newPassword": "Новый пароль",
+"@newPassword": { "description": "Поле нового пароля" },
+
+"confirmNewPassword": "Подтвердите новый пароль",
+"@confirmNewPassword": { "description": "Поле подтверждения пароля" },
+
+"saveData": "Сохранить данные",
+"@saveData": { "description": "Кнопка сохранения" },
+
+"passwordChanged": "Пароль успешно изменен",
+"@passwordChanged": { "description": "Успешная смена пароля" },
+
+"errorOccurred": "Произошла ошибка",
+"@errorOccurred": { "description": "Общая ошибка" }, 
+
+
+
+"changePhone": "Изменить номер телефона",
+"@changePhone": { "description": "Заголовок модала смены телефона" },
+
+"oldPhone": "Старый номер телефона",
+"@oldPhone": { "description": "Поле старого номера телефона" },
+
+"newPhone": "Новый номер телефона",
+"@newPhone": { "description": "Поле нового номера телефона" }, 
+
+
+
+"changeRegion": "Изменить регион",
+"@changeRegion": { "description": "Заголовок модала смены региона" },
+
+"region": "Регион",
+"@region": { "description": "Лейбл поля региона" },
+
+"regionChanged": "Регион успешно изменен",
+"@regionChanged": { "description": "Успешная смена региона" }, 
+
+
+
+"langRussian": "Русский",
+"@langRussian": { "description": "Язык — русский" },
+
+"langEnglish": "English",
+"@langEnglish": { "description": "Язык — английский" },
+
+"langKyrgyz": "Кыргызча",
+"@langKyrgyz": { "description": "Язык — кыргызский" }, 
+
+
+"firstName": "Имя",
+"@firstName": { "description": "Поле имени" },
+
+"lastName": "Фамилия",
+"@lastName": { "description": "Поле фамилии" },
+
+"description": "Описание",
+"@description": { "description": "Поле описания профиля" },
+
+"deleteAccount": "Удалить аккаунт",
+"@deleteAccount": { "description": "Кнопка удаления аккаунта" },
+
+"deleteAccountMessage": "Вы уверены, что хотите удалить аккаунт?",
+"@deleteAccountMessage": { "description": "Сообщение модала удаления аккаунта" }
+}

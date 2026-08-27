@@ -1,0 +1,11 @@
+targets:
+  $default:
+    builders:
+      swagger_dart_code_generator:
+        options:
+          # custom configuration options!
+          input_folder: "lib/data/api/swagger"
+          output_folder: "lib/data/api/swagger/generated"
+          
+          
+          with_base_url: true

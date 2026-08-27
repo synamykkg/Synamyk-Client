@@ -1,0 +1,55 @@
+final fakeVideoLessons = [
+  {
+    "id": "1",
+    "title": "Введение в ОРТ: с чего начать?",
+    "description": "Советы и стратегии для успешной подготовки",
+    "previewUrl": "https://img.youtube.com/vi/Wk9LrgQpD8o/maxresdefault.jpg",
+    "videoUrl": "https://www.youtube.com/watch?v=Wk9LrgQpD8o",
+    "date": "24 Янв, 15:30",
+    "duration": "14:20",
+  },
+  {
+    "id": "2",
+    "title": "Математика: сложные задачи",
+    "description": "Разбор типовых задач по математике",
+    "previewUrl": "https://img.youtube.com/vi/5qap5aO4i9A/maxresdefault.jpg",
+    "videoUrl": "https://www.youtube.com/watch?v=5qap5aO4i9A",
+    "date": "22 Янв, 10:00",
+    "duration": "25:45",
+  },
+  {
+    "id": "3",
+    "title": "Грамматика русского языка",
+    "description": "Основные правила и исключения",
+    "previewUrl": "https://img.youtube.com/vi/d_rL20j_m6o/maxresdefault.jpg",
+    "videoUrl": "https://www.youtube.com/watch?v=d_rL20j_m6o",
+    "date": "20 Янв, 14:15",
+    "duration": "18:10",
+  },
+  {
+    "id": "4",
+    "title": "Аналогии и понимание текста",
+    "description": "Как правильно решать задания раздела",
+    "previewUrl": "https://img.youtube.com/vi/r6jX7zJv8uQ/maxresdefault.jpg",
+    "videoUrl": "https://www.youtube.com/watch?v=r6jX7zJv8uQ",
+    "date": "18 Янв, 09:45",
+    "duration": "22:30",
+  },
+  {
+    "id": "5",
+    "title": "История Кыргызстана: даты",
+    "description": "Запоминаем важные исторические события",
+    "previewUrl": "https://img.youtube.com/vi/GzP9j6x_1m0/maxresdefault.jpg",
+    "videoUrl": "https://www.youtube.com/watch?v=GzP9j6x_1m0",
+    "date": "16 Янв, 16:20",
+    "duration": "30:00",
+  },
+];
+
+final fakeVideoLessonsId = [
+  {"id": "1", "videoUrl": "M5qSR7uXuG4"},
+  {"id": "2", "videoUrl": "asUZxq0_3wk"},
+  {"id": "3", "videoUrl": "5B6m-v9zNFY"},
+  {"id": "4", "videoUrl": "r6jX7zJv8uQ"},
+  {"id": "5", "videoUrl": "GzP9j6x_1m0"},
+];

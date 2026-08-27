@@ -1,0 +1,132 @@
+{
+  "@@locale": "en",
+ 
+  "errorNetwork": "Check your internet connection",
+  "@errorNetwork": { "description": "Network error" },
+ 
+  "errorConnectionTimeout": "Connection timed out",
+  "@errorConnectionTimeout": { "description": "Connection timeout" },
+ 
+  "errorUnauthorized": "Authorization required",
+  "@errorUnauthorized": { "description": "Unauthorized" },
+ 
+  "errorTokenExpired": "Session expired, please sign in again",
+  "@errorTokenExpired": { "description": "Token expired" },
+ 
+  "errorServer": "Server error, please try again later",
+  "@errorServer": { "description": "500 Internal Server Error" },
+ 
+  "errorNotFound": "Resource not found",
+  "@errorNotFound": { "description": "404 Not Found" },
+ 
+  "errorValidation": "Please check your input",
+  "@errorValidation": { "description": "Validation error" },
+ 
+  "errorNoContent": "No content found",
+  "@errorNoContent": { "description": "204 No Content" },
+ 
+  "errorUnknown": "Unknown error",
+  "@errorUnknown": { "description": "Unknown error" },
+
+  "navHome": "Home",
+"navFeed": "Feed",
+"navAnalysis": "Analysis",
+"navProfile": "Profile",
+
+
+"homeTests": "Tests ",
+"appName": "Synamyk",
+"ortTitle": "ORT",
+"ortDescription": "ORT is an entrance exam whose results are taken into account when applying to universities in Kyrgyzstan.",
+"profileTitle": "Profile",
+"points": "points",
+"score": "score",
+"rating": "rating",
+"editProfile": "Edit Profile",
+"settingsData": "Data Settings",
+"settingsLanguage": "Interface Language",
+"next": "Next",
+"skipQuestion": "Skip question",
+"levelOne": "Level 1",
+"calculationSum": "Sum calculation",
+"yourResult": "Your result",
+"resultSuccessMessage": "Excellent! You are a true math expert!",
+"correctAnswers": "correct answers",
+"testLabel": "test",
+"timeLabel": "time",
+"viewErrors": "View errors in answers.",
+"zeroMinutes": "0 minutes", 
+
+
+"freeLevel": "Free level",
+"minutes": "{count} minutes",
+"questions": "{count} questions",
+"subjectUnavailable": "Subject is temporarily unavailable", 
+
+
+"periodWeek": "Week",
+"periodMonth": "Month",
+"periodYear": "Year",
+"periodSixMonths": "Six Months",
+"periodThreeMonths": "Three Months",
+"totalScore": "Total score",
+"analystError": "Error: {message}", 
+
+
+"tabAnalytics": "Analytics chart",
+"tabVideoLessons": "Video lessons", 
+
+"selectOption": "Select option", 
+
+
+"newsDetails": "News Details", 
+
+
+"aiAnalysis": "AI Analysis",
+"questionNumber": "Question {number}",
+"yourAnswer": "Your answer:",
+"correctAnswer": "Correct answer:",
+"aiExplanation": "AI Explanation:", 
+
+
+"analyzeWithAi": "Analyze with AI",
+"results": "Results",
+"correctAnswersOf": "{correct} out of {total}", 
+
+
+"exitTestTitle": "Quit the test?",
+"exitTestMessage": "Are you sure you want to quit the test?",
+"exitTestConfirm": "Yes, quit",
+"exitTestCancel": "No", 
+
+
+"changePassword": "Change password",
+"oldPassword": "Old password",
+"newPassword": "New password",
+"confirmNewPassword": "Confirm new password",
+"saveData": "Save",
+"passwordChanged": "Password changed successfully",
+"errorOccurred": "An error occurred", 
+
+
+"changePhone": "Change phone number",
+"oldPhone": "Old phone number",
+"newPhone": "New phone number", 
+
+
+"changeRegion": "Change region",
+"region": "Region",
+"regionChanged": "Region changed successfully", 
+
+
+"langRussian": "Русский",
+"langEnglish": "English",
+"langKyrgyz": "Кыргызча", 
+
+
+"firstName": "First name",
+"lastName": "Last name",
+"description": "Description",
+"deleteAccount": "Delete account",
+"deleteAccountMessage": "Are you sure you want to delete your account?"
+}

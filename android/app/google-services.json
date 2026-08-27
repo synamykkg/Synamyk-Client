@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "929677986452",
+    "project_id": "synamyk-3117a",
+    "storage_bucket": "synamyk-3117a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929677986452:android:12c477f6232bbe38e1c281",
+        "android_client_info": {
+          "package_name": "com.synamykdeveloper.synamyk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhXFaClBl8baLciUH5p7f93PDMVdKM18g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

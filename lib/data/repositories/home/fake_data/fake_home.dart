@@ -1,0 +1,86 @@
+final List<Map<String, dynamic>> fakeHome = [
+  {
+    "id": "ky",
+    "title": "Кыргызский язык",
+    "subTitle": "Изучение кыргызского языка с нуля",
+    "image": "assets/images/kyrgyz.png",
+  },
+  {
+    "id": "en",
+    "title": "Английский язык",
+    "subTitle": "Глобальный язык для работы и путешествий",
+    "image": "assets/images/english.png",
+  },
+  {
+    "id": "ru",
+    "title": "Русский язык",
+    "subTitle": "Грамматика, речь и понимание",
+    "image": "assets/images/russian.png",
+  },
+  {
+    "id": "ar",
+    "title": "Арабский язык",
+    "subTitle": "Современный литературный арабский",
+    "image": "assets/images/arabic.png",
+  },
+  // {
+  //   "id": "uk",
+  //   "title": "Украинский язык",
+  //   "subTitle": "Основы и разговорная практика",
+  //   "image": "assets/images/ukrainian.png",
+  // },
+  // {
+  //   "id": "pl",
+  //   "title": "Польский язык",
+  //   "subTitle": "Язык для жизни и работы в ЕС",
+  //   "image": "assets/images/polish.png",
+  // },
+  // {
+  //   "id": "es",
+  //   "title": "Испанский язык",
+  //   "subTitle": "Один из самых популярных языков мира",
+  //   "image": "assets/images/spanish.png",
+  // },
+  // {
+  //   "id": "pt",
+  //   "title": "Португальский язык",
+  //   "subTitle": "Португалия и Бразилия",
+  //   "image": "assets/images/portuguese.png",
+  // },
+  // {
+  //   "id": "it",
+  //   "title": "Итальянский язык",
+  //   "subTitle": "Язык культуры и путешествий",
+  //   "image": "assets/images/italian.png",
+  // },
+  // {
+  //   "id": "he",
+  //   "title": "Иврит",
+  //   "subTitle": "Современный иврит для жизни",
+  //   "image": "assets/images/hebrew.png",
+  // },
+  // {
+  //   "id": "de",
+  //   "title": "Немецкий язык",
+  //   "subTitle": "Язык технологий и образования",
+  //   "image": "assets/images/german.png",
+  // },
+  // {
+  //   "id": "ja",
+  //   "title": "Японский язык",
+  //   "subTitle": "Язык Японии и аниме",
+  //   "image": "assets/images/japanese.png",
+  // },
+  // {
+  //   "id": "ch",
+  //   "title": "Китайский язык",
+  //   "subTitle": "Путунхуа (мандарин)",
+  //   "image": "assets/images/chinese.png",
+  // },
+  // {
+  //   "id": "fr",
+  //   "title": "Французский язык",
+  //   "subTitle": "Язык дипломатии и культуры",
+  //   "image": "assets/images/french.png",
+  // },
+];
