@@ -156,6 +156,30 @@ class HomePage extends StatelessWidget {
                 ],
               );
             }
+            if (state is HomeError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Не удалось загрузить тесты',
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      TextButton(
+                        onPressed:
+                            () => context.read<HomeBloc>().add(
+                              GetSubjectsList(),
+                            ),
+                        child: const Text('Повторить'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
             return Center(child: CircularProgressIndicator());
           },
         ),
