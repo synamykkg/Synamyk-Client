@@ -8,6 +8,7 @@ import 'package:synamyk/domain/models/ort_test/ort_sub_test_question_result.dart
 import 'package:synamyk/generated/l10n.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/ort_tests/bloc/ai_analyst/ort_test_ai_analyst_bloc.dart';
+import 'package:synamyk/widgets/math_text.dart';
 
 class OrtTestAiAnalystPage extends StatelessWidget {
   const OrtTestAiAnalystPage({
@@ -43,6 +44,17 @@ class OrtTestAiAnalystPage extends StatelessWidget {
             } else if (state is OrtTestAiAnalystFailure) {
               return Center(child: Text(state.message));
             } else if (state is OrtTestAiAnalystLoaded) {
+              if (state.results.isEmpty) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Text(
+                      'Для выбранных вопросов нет ошибок для анализа',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              }
               return ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: state.results.length,
@@ -69,7 +81,7 @@ class OrtTestAiAnalystPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        MathText(
                           result.question,
                           style: const TextStyle(
                             fontSize: 16,
@@ -101,7 +113,7 @@ class OrtTestAiAnalystPage extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
+                              MathText(
                                 result.userAnswer,
                                 style: const TextStyle(
                                   fontSize: 14,
@@ -136,7 +148,7 @@ class OrtTestAiAnalystPage extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
+                              MathText(
                                 result.correctAnswer,
                                 style: const TextStyle(
                                   fontSize: 14,
@@ -155,7 +167,7 @@ class OrtTestAiAnalystPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text(
+                        MathText(
                           result.explanation,
                           style: const TextStyle(
                             fontSize: 14,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synamyk/data/repositories/payment/payment_repository.dart';
+import 'package:synamyk/error/app_exception.dart';
 import 'package:synamyk/ui/auth/widgets/button_for_auth.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/payment/models/payment_confirm_args.dart';
@@ -23,9 +24,11 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
   Future<void> _pay() async {
     setState(() => _isLoading = true);
     try {
-      final paymentInfo = await GetIt.I<PaymentRepository>().initPayment(
-        widget.args.testId,
-      );
+      final repository = GetIt.I<PaymentRepository>();
+      final paymentInfo =
+          widget.args.target == PaymentTarget.subTest
+              ? await repository.initPaymentForSubTest(widget.args.subTestId!)
+              : await repository.initPaymentForTest(widget.args.testId);
       if (!mounted) return;
 
       await Navigator.of(context).push(
@@ -37,6 +40,9 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
               ),
         ),
       );
+    } on AppException catch (e) {
+      if (!mounted) return;
+      AppMessenger.showError(context, e.message ?? 'Не удалось начать оплату');
     } catch (e) {
       if (!mounted) return;
       AppMessenger.showError(context, 'Не удалось начать оплату');
@@ -66,7 +72,9 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
               Text(widget.args.testTitle, style: AppTextStyles.h3),
               const SizedBox(height: 8),
               Text(
-                widget.args.subTestTitle,
+                widget.args.target == PaymentTarget.subTest
+                    ? (widget.args.subTestTitle ?? '')
+                    : 'Полный доступ ко всем уровням',
                 style: AppTextStyles.bodyMedium.copyWith(
                   color: const Color(0xFF808080),
                 ),

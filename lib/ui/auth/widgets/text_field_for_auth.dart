@@ -51,7 +51,7 @@ class TextFieldForAuth extends StatelessWidget {
           ),
           labelText: text,
           labelStyle: const TextStyle(color: Colors.grey),
-          prefixText: isPhone ? '+' : null,
+          prefixText: isPhone ? '+996 ' : null,
           suffixIcon:
               isPassword
                   ? IconButton(

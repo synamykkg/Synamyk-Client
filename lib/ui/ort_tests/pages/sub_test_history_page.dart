@@ -122,7 +122,7 @@ class _SubTestHistoryPageState extends State<SubTestHistoryPage> {
     if (_entries.isEmpty) {
       return Center(
         child: Text(
-          'Вы ещё не проходили этот подтест',
+          'Вы ещё не проходили этот тест',
           style: AppTextStyles.bodyMedium,
         ),
       );

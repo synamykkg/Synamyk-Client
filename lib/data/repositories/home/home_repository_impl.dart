@@ -66,6 +66,9 @@ class HomeRepositoryImpl implements HomeRepository {
           bestScore: subTest.bestScore,
           bestSessionId: subTest.bestSessionId,
           attemptsCount: subTest.attemptsCount ?? 0,
+          price: subTest.price ?? 0,
+          effectiveFree: subTest.effectiveFree ?? false,
+          freeUntil: subTest.freeUntil,
         );
       }).toList();
 

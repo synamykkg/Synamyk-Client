@@ -7,6 +7,7 @@ import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/ort_tests/bloc/ort_test_bloc.dart';
 import 'package:synamyk/ui/ort_tests/widgets/ort_test_exit_modal.dart';
 import 'package:synamyk/utils/format_duration.dart';
+import 'package:synamyk/widgets/math_text.dart';
 
 class OrtTestView extends StatelessWidget {
   const OrtTestView({super.key, required this.state});
@@ -124,7 +125,7 @@ class OrtTestView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(ortTest.text, style: AppTextStyles.questionTitle),
+              MathText(ortTest.text, style: AppTextStyles.questionTitle),
               // Text(
               //   state.ortTestList[state.pages].question,
               //   style: AppTextStyles.questionText,
@@ -159,11 +160,14 @@ class OrtTestView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   width: 350,
-                  height: 52,
-                  // alignment: Alignment.center,
+                  constraints: const BoxConstraints(minHeight: 52),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 12,
+                    ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 12,
                       children: [
                         Container(
@@ -182,9 +186,11 @@ class OrtTestView extends StatelessWidget {
                           ortTest.options[index].label,
                           style: const TextStyle(fontSize: 14),
                         ),
-                        Text(
-                          ortTest.options[index].text,
-                          style: const TextStyle(fontSize: 14),
+                        Expanded(
+                          child: MathText(
+                            ortTest.options[index].text,
+                            style: const TextStyle(fontSize: 14),
+                          ),
                         ),
                       ],
                     ),

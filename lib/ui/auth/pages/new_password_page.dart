@@ -27,7 +27,7 @@ class NewPasswordPage extends StatelessWidget {
         listener: (context, state) {
           if (state.status == ResetPasswordNewStatus.success) {
             // Navigate to login or success page
-            context.go('/sign-in'); // Or specific success route
+            context.go('/sign_in'); // Or specific success route
             // ScaffoldMessenger.of(context).showSnackBar(
             //   const SnackBar(content: Text("Пароль успешно сменен")),
             // );

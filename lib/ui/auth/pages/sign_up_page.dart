@@ -39,7 +39,7 @@ class SignUpPage extends StatelessWidget {
       child: BlocConsumer<SignUpBloc, SignUpState>(
         listener: (context, state) {
           if (state.status == AuthStepStatus.success) {
-            context.go('/auth/confirm_phone', extra: state.phone);
+            context.push('/auth/confirm_phone', extra: state.phone);
           }
           if (state.status == AuthStepStatus.failed) {
             final error = state.error;
@@ -230,7 +230,7 @@ class SignUpPage extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: TextButton(
                       onPressed: () => context.push('/sign_in'),
-                      child: Text("Есть аккаунта? Войти"),
+                      child: Text("Есть аккаунт? Войти"),
                     ),
                   ),
                 ],

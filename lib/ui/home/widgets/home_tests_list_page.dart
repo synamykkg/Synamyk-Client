@@ -7,7 +7,19 @@ import 'package:synamyk/generated/l10n.dart';
 import 'package:synamyk/ui/core/ui/resources/app_strings.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/home/bloc/subject_tests/subject_tests_bloc.dart';
+import 'package:synamyk/domain/models/home/subject_tests.dart';
 import 'package:synamyk/ui/payment/models/payment_confirm_args.dart';
+
+/// Label for a sub-test's active free-access window, or `null` if it isn't
+/// currently free. `freeUntil` is local (Asia/Bishkek) time, compared
+/// directly against the device clock — no timezone conversion.
+String? _freeBadgeText(SubjectTests subTest) {
+  if (!subTest.effectiveFree) return null;
+  final until = subTest.freeUntil;
+  if (until == null) return 'Бесплатно';
+  final days = until.difference(DateTime.now()).inDays;
+  return days >= 1 ? 'Бесплатно ещё $days дн.' : 'Бесплатно сегодня';
+}
 
 class HomeTestsListPage extends StatelessWidget {
   const HomeTestsListPage({super.key, required this.language});
@@ -197,30 +209,11 @@ class HomeTestsListPage extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Платные уровни',
+                                    'Платные',
                                     style: AppTextStyles.testCardTitle,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF4E6FA),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Text(
-                                      '${state.price.toStringAsFixed(0)} сом',
-                                      style: AppTextStyles.testCardMetadata
-                                          .copyWith(
-                                            color: const Color(0xFF7B1FA2),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
                                   ),
                                 ],
                               ),
@@ -239,6 +232,7 @@ class HomeTestsListPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final subTest = state.paidTests[index];
                             final locked = !subTest.hasAccess;
+                            final freeBadge = _freeBadgeText(subTest);
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16),
@@ -257,28 +251,17 @@ class HomeTestsListPage extends StatelessWidget {
                                         status:
                                             locked
                                                 ? _LevelStatus.locked
-                                                : _LevelStatus.unlocked,
+                                                : (freeBadge != null
+                                                    ? _LevelStatus.free
+                                                    : _LevelStatus.unlocked),
                                       ),
                                       GestureDetector(
-                                        onTap: () {
-                                          if (locked) {
-                                            context.push(
-                                              '/payment',
-                                              extra: PaymentConfirmArgs(
-                                                testId: int.parse(language),
-                                                subTestId: int.parse(subTest.id),
-                                                testTitle: state.testTitle,
-                                                subTestTitle: subTest.title,
-                                                price: state.price,
-                                                language: language,
-                                              ),
-                                            );
-                                          } else {
-                                            context.go(
-                                              '/ort_test/$language/${subTest.id}',
-                                            );
-                                          }
-                                        },
+                                        onTap:
+                                            locked
+                                                ? null
+                                                : () => context.go(
+                                                  '/ort_test/$language/${subTest.id}',
+                                                ),
                                         child: Container(
                                           width: 282,
                                           constraints: const BoxConstraints(minHeight: 97),
@@ -314,6 +297,37 @@ class HomeTestsListPage extends StatelessWidget {
                                                       AppTextStyles
                                                           .testCardTitle,
                                                 ),
+                                                if (freeBadge != null) ...[
+                                                  const SizedBox(height: 4),
+                                                  Container(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 3,
+                                                        ),
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                        0xFFE8F5E9,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            20,
+                                                          ),
+                                                    ),
+                                                    child: Text(
+                                                      freeBadge,
+                                                      style: AppTextStyles
+                                                          .testCardMetadata
+                                                          .copyWith(
+                                                            color: const Color(
+                                                              0xFF2E7D32,
+                                                            ),
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ],
                                                 const SizedBox(height: 4),
                                                 Row(
                                                   spacing: 10,
@@ -390,6 +404,47 @@ class HomeTestsListPage extends StatelessWidget {
                                                     ],
                                                   ),
                                                 ],
+                                                if (locked) ...[
+                                                  if (subTest.price > 0) ...[
+                                                    const SizedBox(height: 10),
+                                                    SizedBox(
+                                                      width: double.infinity,
+                                                      child: _BuyButton(
+                                                        label:
+                                                            'Купить тест — ${subTest.price.toStringAsFixed(0)} сом',
+                                                        onTap:
+                                                            () => context.push(
+                                                              '/payment',
+                                                              extra: PaymentConfirmArgs(
+                                                                target:
+                                                                    PaymentTarget
+                                                                        .subTest,
+                                                                testId:
+                                                                    int.parse(
+                                                                      language,
+                                                                    ),
+                                                                subTestId:
+                                                                    int.parse(
+                                                                      subTest
+                                                                          .id,
+                                                                    ),
+                                                                testTitle:
+                                                                    state
+                                                                        .testTitle,
+                                                                subTestTitle:
+                                                                    subTest
+                                                                        .title,
+                                                                price:
+                                                                    subTest
+                                                                        .price,
+                                                                language:
+                                                                    language,
+                                                              ),
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
                                               ],
                                             ),
                                           ),
@@ -404,6 +459,37 @@ class HomeTestsListPage extends StatelessWidget {
                         ),
                       )
                       : const SliverToBoxAdapter(child: SizedBox()),
+                  if (state.price > 0 &&
+                      state.paidTests.any((t) => !t.hasAccess))
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: GestureDetector(
+                            onTap:
+                                () => context.push(
+                                  '/payment',
+                                  extra: PaymentConfirmArgs(
+                                    target: PaymentTarget.test,
+                                    testId: int.parse(language),
+                                    testTitle: state.testTitle,
+                                    price: state.price,
+                                    language: language,
+                                  ),
+                                ),
+                            child: Text(
+                              'Открыть весь тест — ${state.price.toStringAsFixed(0)} сом',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.testCardMetadata.copyWith(
+                                color: const Color(0xFF7B1FA2),
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               );
             }
@@ -505,6 +591,37 @@ class _CardActionChip extends StatelessWidget {
             if (enabled)
               Icon(Icons.chevron_right_rounded, size: 14, color: effectiveColor),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Filled purple CTA for buying a locked sub-test — the primary action on
+/// a locked level card.
+class _BuyButton extends StatelessWidget {
+  const _BuyButton({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFF7B1FA2),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.testCardMetadata.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );

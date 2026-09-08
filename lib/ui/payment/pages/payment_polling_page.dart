@@ -50,9 +50,10 @@ class _PaymentPollingPageState extends State<PaymentPollingPage> {
 
         if (status == 'COMPLETED') {
           if (!mounted) return;
-          // subTestId <= 0 means this was a test-level repay (e.g. from
-          // "Мои покупки") with no specific sub-test to jump into.
-          if (widget.args.subTestId > 0) {
+          // A sub-test purchase jumps straight into what was just bought;
+          // a bundle purchase has no single sub-test to land on, so it
+          // goes back to the (now-unlocked) test list instead.
+          if (widget.args.target == PaymentTarget.subTest) {
             context.go(
               '/ort_test/${widget.args.language}/${widget.args.subTestId}',
             );

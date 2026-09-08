@@ -26,7 +26,7 @@ class ResetPasswordPage extends StatelessWidget {
       child: BlocListener<ResetPasswordPhoneBloc, ResetPasswordPhoneState>(
         listener: (context, state) {
           if (state.status == ResetPasswordPhoneStatus.success) {
-            context.go(
+            context.push(
               '/auth/reset_password_phone_confirm',
               extra: state.phone,
             );

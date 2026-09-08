@@ -35,7 +35,7 @@ class SignUpConfirmPage extends StatelessWidget {
             // or we might need to pop here if it's a pushed route.
             // But usually AppAuthBloc state change triggers router refresh.
             // For safety or specific flow, we can also check if we need to do anything.
-            context.go('/auth/user_info');
+            context.push('/auth/user_info');
           }
           else if (state.status == AuthStepStatus.failed) {
             AppMessenger.showError(
@@ -61,7 +61,7 @@ class SignUpConfirmPage extends StatelessWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    'Введите 4-значный код, который мы отправили на номер $phone',
+                    'Введите 4-значный код, который мы отправили на номер +996 $phone',
                     'assets/images/logo/synamyk_logo.png',
                   ),
 

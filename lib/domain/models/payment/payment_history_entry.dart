@@ -5,6 +5,8 @@ class PaymentHistoryEntry {
     required this.paymentId,
     required this.testId,
     required this.testTitle,
+    this.subTestId,
+    this.subTestTitle,
     required this.amount,
     required this.status,
     required this.receiptNumber,
@@ -16,6 +18,13 @@ class PaymentHistoryEntry {
   final String paymentId;
   final int testId;
   final String testTitle;
+
+  /// `null` when this payment was for the whole test (bundle).
+  final int? subTestId;
+
+  /// `null` when this payment was for the whole test (bundle).
+  final String? subTestTitle;
+
   final double amount;
   final PaymentStatus status;
 
@@ -32,6 +41,8 @@ class PaymentHistoryEntry {
       paymentId: json['paymentId'] as String,
       testId: json['testId'] as int,
       testTitle: json['testTitle'] as String? ?? '',
+      subTestId: json['subTestId'] as int?,
+      subTestTitle: json['subTestTitle'] as String?,
       amount: (json['amount'] as num?)?.toDouble() ?? 0,
       status: PaymentStatus.fromJson(json['status'] as String?),
       receiptNumber: json['receiptNumber'] as String?,

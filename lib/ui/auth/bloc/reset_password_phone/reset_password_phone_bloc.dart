@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synamyk/data/repositories/auth/auth_repository.dart';
 import 'package:synamyk/domain/enums/app_language.dart';
 import 'package:synamyk/domain/enums/otp_type.dart';
+import 'package:synamyk/utils/auth/phone_input_formatter.dart';
 
 part 'reset_password_phone_event.dart';
 part 'reset_password_phone_state.dart';

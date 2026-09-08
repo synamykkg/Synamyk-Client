@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -40,14 +41,26 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileLoaded(currentUser, isAvatarUpdating: true));
 
     try {
-      final compressed = await FlutterImageCompress.compressWithFile(
-        event.filePath,
-        minWidth: 1024,
-        minHeight: 1024,
-        quality: 80,
-        format: CompressFormat.jpeg,
-      );
-      if (compressed == null) {
+      // `compressWithFile` can't open a picked file by path on web (blob:
+      // URLs aren't real filesystem paths there), so compress the
+      // already-read bytes instead.
+      final compressed =
+          kIsWeb
+              ? await FlutterImageCompress.compressWithList(
+                event.bytes,
+                minWidth: 1024,
+                minHeight: 1024,
+                quality: 80,
+                format: CompressFormat.jpeg,
+              )
+              : await FlutterImageCompress.compressWithFile(
+                event.filePath,
+                minWidth: 1024,
+                minHeight: 1024,
+                quality: 80,
+                format: CompressFormat.jpeg,
+              );
+      if (compressed == null || compressed.isEmpty) {
         throw AppException.unknown('Не удалось обработать изображение');
       }
 

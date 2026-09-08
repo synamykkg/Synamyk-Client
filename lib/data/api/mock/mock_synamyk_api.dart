@@ -316,7 +316,8 @@ class MockSynamykApi implements SynamykApi {
 
   @override
   Future<Response<InitPaymentResponse>> apiPaymentsInitPost({
-    required int? testId,
+    int? testId,
+    int? subTestId,
   }) {
     // TODO: implement apiPaymentsInitPost
     throw UnimplementedError();

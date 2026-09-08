@@ -768,7 +768,8 @@ void _showAvatarActionsSheet(
           imageQuality: 90,
         );
         if (picked == null) return;
-        bloc.add(UploadAvatarRequested(picked.path));
+        final bytes = await picked.readAsBytes();
+        bloc.add(UploadAvatarRequested(picked.path, bytes));
       }
 
       return SafeArea(

@@ -7,7 +7,7 @@ class ResetPasswordPhoneState {
   final String phone;
   final Exception? error;
 
-  bool get isValid => phone.isNotEmpty;
+  bool get isValid => isCompleteLocalPhone(phone);
 
   const ResetPasswordPhoneState({
     this.status = ResetPasswordPhoneStatus.initial,

@@ -389,6 +389,18 @@ class _GameQuestionView extends StatelessWidget {
               ),
             ),
           ),
+          if (state.selectedOptionId != null &&
+              state.lastAnswerCorrect == null) ...[
+            Center(
+              child: AnimatedEllipsisText(
+                'Ждём результат раунда',
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: const Color(0xFF9E9E9E),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
           Center(
             child: _PillButton(
               label: 'Сдаться',
@@ -533,6 +545,9 @@ class _PlayerBadge extends StatelessWidget {
   }
 }
 
+Widget _maybePulse(bool active, Widget child) =>
+    active ? Pulse(minScale: 0.85, child: child) : child;
+
 class _OptionTile extends StatelessWidget {
   const _OptionTile({
     required this.option,
@@ -575,6 +590,11 @@ class _OptionTile extends StatelessWidget {
     }
 
     final letter = String.fromCharCode(65 + index); // A, B, C, D…
+    // Selected but not yet resolved: the round only completes once the
+    // server has both players' answers (or the timer runs out), which can
+    // take a few seconds. Without a visible "still working" cue this reads
+    // as a frozen/laggy tap rather than a normal wait.
+    final awaitingResult = isSelected && state.lastAnswerCorrect == null;
 
     return PressableScale(
       onTap:
@@ -595,29 +615,43 @@ class _OptionTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: 28,
-              height: 28,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: badgeBackground,
-                shape: BoxShape.circle,
-              ),
-              child:
-                  statusIcon != null
-                      ? Icon(statusIcon, color: badgeColor, size: 16)
-                      : Text(
-                        letter,
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: badgeColor,
-                          fontWeight: FontWeight.w700,
+            _maybePulse(
+              awaitingResult,
+              Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: badgeBackground,
+                  shape: BoxShape.circle,
+                ),
+                child:
+                    statusIcon != null
+                        ? Icon(statusIcon, color: badgeColor, size: 16)
+                        : Text(
+                          letter,
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: badgeColor,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(option.text, style: AppTextStyles.bodyLarge),
             ),
+            if (awaitingResult) ...[
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: badgeColor,
+                ),
+              ),
+            ],
           ],
         ),
       ),

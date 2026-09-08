@@ -27,7 +27,7 @@ class ResetPasswordPhoneConfirmPage extends StatelessWidget {
       child: BlocListener<ResetPasswordVerifyBloc, ResetPasswordVerifyState>(
         listener: (context, state) {
           if (state.status == ResetPasswordVerifyStatus.success) {
-            context.go('/auth/new_password', extra: state.resetToken);
+            context.push('/auth/new_password', extra: state.resetToken);
           } else if (state.status == ResetPasswordVerifyStatus.failure) {
             AppMessenger.showError(
               context,
@@ -53,7 +53,7 @@ class ResetPasswordPhoneConfirmPage extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      'Введите код из СМС, отправленный на номер $phone',
+                      'Введите код из СМС, отправленный на номер +996 $phone',
                       'assets/images/logo/synamyk_logo.png',
                     ),
                     SliverToBoxAdapter(child: SizedBox(height: 20)),

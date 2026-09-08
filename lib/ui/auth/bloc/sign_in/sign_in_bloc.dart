@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:synamyk/data/repositories/auth/auth_repository.dart';
 import 'package:synamyk/ui/auth/bloc/app_auth_bloc.dart';
+import 'package:synamyk/utils/auth/phone_input_formatter.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
@@ -46,7 +47,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     SignInSubmitted event,
     Emitter<SignInState> emit,
   ) async {
-    if (state.phone.isEmpty || state.password.isEmpty) {
+    if (!isCompleteLocalPhone(state.phone) || state.password.isEmpty) {
       emit(
         state.copyWith(
           status: SignInStatus.failure,

@@ -285,19 +285,23 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                     result.questionId.toString(),
                   );
                   final isSkipped = result.isSkipped;
+                  // AI analysis only makes sense for wrong answers: a
+                  // correct or skipped question has no "error" to explain,
+                  // and the backend returns an empty analysis for it.
+                  final isSelectable = !isSkipped && !result.isCorrect;
 
                   return GestureDetector(
                     onTap:
-                        isSkipped
-                            ? null
-                            : () =>
-                                _toggleSelection(result.questionId.toString()),
+                        isSelectable
+                            ? () =>
+                                _toggleSelection(result.questionId.toString())
+                            : null,
                     child: Container(
                       decoration: BoxDecoration(
                         color:
-                            isSkipped
-                                ? Colors.grey.withOpacity(0.1)
-                                : Colors.white,
+                            isSelectable
+                                ? Colors.white
+                                : Colors.grey.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color:
@@ -305,7 +309,7 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                                   ? Colors.purple
                                   : const Color(
                                     0xFF252525,
-                                  ).withOpacity(isSkipped ? 0.2 : 0.5),
+                                  ).withOpacity(isSelectable ? 0.5 : 0.2),
                           width: isSelected ? 3 : 1,
                         ),
                       ),
@@ -346,7 +350,7 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                                       result.isCorrect
                                           ? 0xFF08A64A
                                           : 0xFFE34444,
-                                    ).withOpacity(isSkipped ? 0.2 : 0.5),
+                                    ).withOpacity(isSelectable ? 0.5 : 0.2),
                                   ),
                                 ),
                               ],

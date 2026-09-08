@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show Color;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -44,7 +45,7 @@ class PushNotificationService {
     try {
       await _localNotifications.initialize(
         settings: const InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+          android: AndroidInitializationSettings('@drawable/ic_notification'),
           iOS: DarwinInitializationSettings(),
         ),
       );
@@ -112,6 +113,8 @@ class PushNotificationService {
             channelDescription: _defaultChannel.description,
             importance: Importance.high,
             priority: Priority.high,
+            icon: '@drawable/ic_notification',
+            color: const Color(0xFF7B1FA2),
           ),
           iOS: const DarwinNotificationDetails(),
         ),

@@ -7,6 +7,7 @@ import 'package:synamyk/domain/enums/auth_step_status.dart';
 import 'package:synamyk/error/exceptions.dart';
 import 'package:synamyk/ui/auth/bloc/app_auth_bloc.dart';
 import 'package:synamyk/utils/auth/is_valid_sign_in.dart';
+import 'package:synamyk/utils/auth/phone_input_formatter.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';

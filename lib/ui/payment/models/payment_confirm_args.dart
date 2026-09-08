@@ -1,17 +1,29 @@
+enum PaymentTarget { subTest, test }
+
 class PaymentConfirmArgs {
   const PaymentConfirmArgs({
+    required this.target,
     required this.testId,
-    required this.subTestId,
+    this.subTestId,
     required this.testTitle,
-    required this.subTestTitle,
+    this.subTestTitle,
     required this.price,
     required this.language,
   });
 
+  /// Whether this purchase is for one sub-test or the whole test (bundle).
+  final PaymentTarget target;
+
   final int testId;
-  final int subTestId;
+
+  /// Required when [target] is [PaymentTarget.subTest].
+  final int? subTestId;
+
   final String testTitle;
-  final String subTestTitle;
+
+  /// Required when [target] is [PaymentTarget.subTest].
+  final String? subTestTitle;
+
   final double price;
 
   /// Route param used by `/ort_test/:language/:id` — historically the parent test id.

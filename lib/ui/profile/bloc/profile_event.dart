@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
 
@@ -44,11 +45,14 @@ class SaveAvatar extends ProfileEvent {
 
 /// Uploads (or replaces) the avatar via the dedicated `/api/profile/avatar`
 /// endpoint. `filePath` is the raw picked image; compression happens in
-/// the bloc before upload.
+/// the bloc before upload. `bytes` is the same image already read into
+/// memory — `flutter_image_compress` can't read a picked file by path on
+/// web (blob: URLs), so the bloc falls back to compressing `bytes` there.
 class UploadAvatarRequested extends ProfileEvent {
   final String filePath;
+  final Uint8List bytes;
 
-  const UploadAvatarRequested(this.filePath);
+  const UploadAvatarRequested(this.filePath, this.bytes);
 
   @override
   List<Object> get props => [filePath];

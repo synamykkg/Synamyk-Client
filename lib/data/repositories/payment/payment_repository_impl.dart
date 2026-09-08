@@ -13,11 +13,28 @@ class PaymentRepositoryImpl implements PaymentRepository {
 
   final SynamykApiClient synamykApi;
 
+  static const _fallbackNameEn = 'Synamyk ORT Test';
+
+  /// Finik requires a Latin-script name; the backend's `nameEn` field is
+  /// sometimes populated with the localized (Cyrillic) test name instead,
+  /// which Finik rejects with "имя указано неверно". Fall back to a safe
+  /// constant whenever the backend value isn't plain ASCII.
+  static bool _isAsciiName(String value) =>
+      value.isNotEmpty && RegExp(r'^[\x00-\x7F]+$').hasMatch(value);
+
   @override
-  Future<InitPaymentInfo> initPayment(int testId) async {
+  Future<InitPaymentInfo> initPaymentForTest(int testId) =>
+      _initPayment(testId: testId);
+
+  @override
+  Future<InitPaymentInfo> initPaymentForSubTest(int subTestId) =>
+      _initPayment(subTestId: subTestId);
+
+  Future<InitPaymentInfo> _initPayment({int? testId, int? subTestId}) async {
     try {
       final response = await synamykApi.auth.apiPaymentsInitPost(
         testId: testId,
+        subTestId: subTestId,
       );
       if (!response.isSuccessful) {
         throw ExceptionParser.parseResponse(
@@ -39,7 +56,10 @@ class PaymentRepositoryImpl implements PaymentRepository {
         paymentId: paymentId,
         accountId: AppConfig.finikAccountId,
         amount: amount,
-        nameEn: body.nameEn ?? 'Synamyk ORT Test',
+        nameEn:
+            (body.nameEn != null && _isAsciiName(body.nameEn!))
+                ? body.nameEn!
+                : _fallbackNameEn,
         callbackUrl: body.callbackUrl ?? '',
       );
     } on AppException {
@@ -91,6 +111,8 @@ class PaymentRepositoryImpl implements PaymentRepository {
                   paymentId: e.paymentId ?? (throw AppException.unknown()),
                   testId: e.testId ?? (throw AppException.unknown()),
                   testTitle: e.testTitle ?? '',
+                  subTestId: e.subTestId,
+                  subTestTitle: e.subTestTitle,
                   amount: e.amount ?? 0,
                   status: PaymentStatus.fromJson(e.status),
                   receiptNumber: e.receiptNumber,

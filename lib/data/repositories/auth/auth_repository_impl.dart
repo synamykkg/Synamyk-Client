@@ -22,6 +22,7 @@ import 'package:synamyk/domain/models/user/user_model.dart';
 import 'package:synamyk/error/api_error_parser.dart';
 import 'package:synamyk/error/app_exception.dart';
 import 'package:synamyk/error/exceptions.dart';
+import 'package:synamyk/utils/auth/phone_input_formatter.dart';
 import 'package:synamyk/utils/image_picker_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -49,7 +50,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<AuthToken> signIn(String phone, String password) async {
     try {
       final result = await synamykApi.public.apiAuthLoginPost(
-        body: LoginRequest(password: password, phone: phone),
+        body: LoginRequest(
+          password: password,
+          phone: normalizePhoneForApi(phone),
+        ),
       );
 
       if (!result.isSuccessful) {
@@ -81,7 +85,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> sendOtpSms(String phone, OtpType type, AppLanguage lang) async {
     try {
       final result = await synamykApi.public.apiAuthSendOtpPost(
-        phone: phone,
+        phone: normalizePhoneForApi(phone),
         lang: lang.apiCode,
         type: type.value,
       );
@@ -115,7 +119,7 @@ class AuthRepositoryImpl implements AuthRepository {
   ) async {
     try {
       final result = await synamykApi.public.apiAuthResendOtpPost(
-        phone: phone,
+        phone: normalizePhoneForApi(phone),
         lang: lang.apiCode,
         type: type.value,
       );
@@ -176,7 +180,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       final result = await synamykApi.public.apiAuthVerifyOtpPost(
-        body: VerifyOtpRequest(type: type, code: code, phone: phone.trim()),
+        body: VerifyOtpRequest(
+          type: type,
+          code: code,
+          phone: normalizePhoneForApi(phone),
+        ),
       );
 
       if (!result.isSuccessful) {
@@ -200,10 +208,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthResponse> signUp(String phone, String password) async {
     try {
-      debugPrint(phone);
       final result = await synamykApi.public.apiAuthRegisterPost(
         body: RegisterRequest(
-          phone: phone,
+          phone: normalizePhoneForApi(phone),
           password: password,
           confirmPassword: password,
         ),

@@ -292,27 +292,30 @@ class OrtTestsRepositoryImpl implements OrtTestsRepository {
         sessionId: sessionId,
         body: ErrorAnalysisRequest(questionIds: questionIds),
       );
-      if (data.statusCode == 200) {
-        final result = data.body;
-        if (result == null) throw AppException.unknown();
-        if (result.analyses == null) throw AppException.unknown();
-
-        return result.analyses!
-            .map(
-              (e) => AiAnalysisResult(
-                id: e.questionId!,
-
-                question: e.questionText!,
-                userAnswer: e.wrongAnswer!,
-                correctAnswer: e.correctAnswer!,
-                explanation: e.explanation!,
-              ),
-            )
-            .toList();
+      if (!data.isSuccessful) {
+        throw ExceptionParser.parseResponse(data.statusCode, data.error);
       }
-      throw AppException.unknown();
-    } catch (e) {
+
+      final result = data.body;
+      if (result == null) throw AppException.unknown();
+      if (result.analyses == null) throw AppException.unknown();
+
+      return result.analyses!
+          .map(
+            (e) => AiAnalysisResult(
+              id: e.questionId!,
+
+              question: e.questionText!,
+              userAnswer: e.wrongAnswer!,
+              correctAnswer: e.correctAnswer!,
+              explanation: e.explanation!,
+            ),
+          )
+          .toList();
+    } on AppException {
       rethrow;
+    } catch (e) {
+      throw ExceptionParser.parse(e);
     }
   }
 

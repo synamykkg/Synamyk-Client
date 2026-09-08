@@ -41,14 +41,26 @@ class OrtTestBloc extends Bloc<OrtTestEvent, OrtTestState> {
         //   emit(current.copyWith(ortTestList: ortSubTest));
         // }
         final ortTests = await ortTestRepository.startOrtTest(event.id);
-        final ortSubTest = await ortTestRepository.getOrtTest(
-          ortTests.sessionId,
-          '',
-        );
 
-        emit(OrtTestLoaded(ortTest: ortTests, ortTestList: ortSubTest));
+        try {
+          final ortSubTest = await ortTestRepository.getOrtTest(
+            ortTests.sessionId,
+            '',
+          );
 
-        add(StartTimerOrtTest(duration: ortTests.durationMinutes * 60));
+          emit(OrtTestLoaded(ortTest: ortTests, ortTestList: ortSubTest));
+
+          add(StartTimerOrtTest(duration: ortTests.durationMinutes * 60));
+        } catch (e) {
+          // Backend returns 204 when the test has no questions — treat it
+          // the same as running out of questions mid-test instead of
+          // surfacing a generic error.
+          if (e is AppException && e.isNoContent) {
+            await _handleFinish(ortTests.sessionId, emit);
+          } else {
+            rethrow;
+          }
+        }
       } catch (e) {
         emit(OrtTestFailure(exception: e));
       }
@@ -77,7 +89,7 @@ class OrtTestBloc extends Bloc<OrtTestEvent, OrtTestState> {
       } catch (e) {
         // ловим всё
         if (e is AppException && e.isNoContent) {
-          await _handleFinish(current, emit);
+          await _handleFinish(current.ortTest.sessionId, emit);
         } else {
           emit(OrtTestFailure(exception: e));
         }
@@ -105,7 +117,7 @@ class OrtTestBloc extends Bloc<OrtTestEvent, OrtTestState> {
       } catch (e) {
         // ловим всё
         if (e is AppException && e.isNoContent) {
-          await _handleFinish(current, emit);
+          await _handleFinish(current.ortTest.sessionId, emit);
         } else {
           emit(OrtTestFailure(exception: e));
         }
@@ -156,7 +168,7 @@ class OrtTestBloc extends Bloc<OrtTestEvent, OrtTestState> {
       //   current.ortTest.sessionId,
       // );
 
-      await _handleFinish(current, emit);
+      await _handleFinish(current.ortTest.sessionId, emit);
 
       emit(current.copyWith(isExitModal: ExitModalState.submitted));
     });
@@ -228,13 +240,11 @@ class OrtTestBloc extends Bloc<OrtTestEvent, OrtTestState> {
   // }
 
   Future<void> _handleFinish(
-    OrtTestLoaded current,
+    int sessionId,
     Emitter<OrtTestState> emit,
   ) async {
     try {
-      final finishResult = await ortTestRepository.finishOrtTest(
-        current.ortTest.sessionId,
-      );
+      final finishResult = await ortTestRepository.finishOrtTest(sessionId);
       _tickerSubscription?.cancel();
       emit(OrtTestCompleted(finishResult: finishResult));
     } catch (e) {

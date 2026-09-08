@@ -48,4 +48,6 @@ app.*.map.json
 .env
 
 # Generated code
-lib/data/api/swagger/generated/.claude/
+lib/data/api/swagger/generated/
+
+.claude/

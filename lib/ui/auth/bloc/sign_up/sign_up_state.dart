@@ -20,7 +20,7 @@ class SignUpState extends Equatable {
   final Exception? error;
 
   bool get isValid {
-    return phone.isNotEmpty && password.isNotEmpty && deal;
+    return isCompleteLocalPhone(phone) && password.isNotEmpty && deal;
   }
 
   SignUpState copyWith({

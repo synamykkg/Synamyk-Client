@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:synamyk/data/repositories/payment/payment_repository.dart';
 import 'package:synamyk/domain/enums/payment_status.dart';
+import 'package:synamyk/error/app_exception.dart';
 import 'package:synamyk/domain/models/payment/payment_history_entry.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/game/widgets/game_motion.dart';
@@ -94,9 +95,12 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
 
     setState(() => _payingId = entry.paymentId);
     try {
-      final paymentInfo = await GetIt.I<PaymentRepository>().initPayment(
-        entry.testId,
-      );
+      final repository = GetIt.I<PaymentRepository>();
+      final isSubTestPurchase = entry.subTestId != null;
+      final paymentInfo =
+          isSubTestPurchase
+              ? await repository.initPaymentForSubTest(entry.subTestId!)
+              : await repository.initPaymentForTest(entry.testId);
       if (!mounted) return;
 
       await Navigator.of(context).push(
@@ -105,18 +109,23 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
               (context) => FinikPaymentPage(
                 paymentInfo: paymentInfo,
                 confirmArgs: PaymentConfirmArgs(
+                  target:
+                      isSubTestPurchase
+                          ? PaymentTarget.subTest
+                          : PaymentTarget.test,
                   testId: entry.testId,
-                  // No specific sub-test in this context — a test-level
-                  // repay just lands back on the test's level list.
-                  subTestId: 0,
+                  subTestId: entry.subTestId,
                   testTitle: entry.testTitle,
-                  subTestTitle: entry.testTitle,
+                  subTestTitle: entry.subTestTitle,
                   price: entry.amount,
                   language: entry.testId.toString(),
                 ),
               ),
         ),
       );
+    } on AppException catch (e) {
+      if (!mounted) return;
+      AppMessenger.showError(context, e.message ?? 'Не удалось начать оплату');
     } catch (_) {
       if (!mounted) return;
       AppMessenger.showError(context, 'Не удалось начать оплату');
@@ -241,7 +250,9 @@ class _PurchaseTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    entry.testTitle,
+                    entry.subTestId != null
+                        ? (entry.subTestTitle ?? entry.testTitle)
+                        : entry.testTitle,
                     style: AppTextStyles.testCardTitle,
                   ),
                 ),
@@ -262,6 +273,13 @@ class _PurchaseTile extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 2),
+            Text(
+              entry.subTestId != null ? 'Подтест' : 'Полный доступ',
+              style: AppTextStyles.bodySmall.copyWith(
+                color: const Color(0xFF7B1FA2),
+              ),
             ),
             const SizedBox(height: 4),
             Text(
