@@ -27,12 +27,11 @@ class ReusableModal extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder:
-          (context) => ReusableModal(
-            title: title,
-            slivers: slivers,
-            heightFactor: heightFactor,
-          ),
+      builder: (context) => ReusableModal(
+        title: title,
+        slivers: slivers,
+        heightFactor: heightFactor,
+      ),
     );
   }
 

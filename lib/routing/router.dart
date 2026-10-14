@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_finish_result.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_question_result.dart';
+import 'package:synamyk/domain/models/ort_attempt/attempt_result.dart';
 import 'package:synamyk/ui/analyst/pages/analyst_page.dart';
+import 'package:synamyk/ui/catalog/pages/product_payment_page.dart';
+import 'package:synamyk/ui/catalog/pages/text_detail_page.dart';
+import 'package:synamyk/ui/game/pages/game_leaderboard_page.dart';
+import 'package:synamyk/ui/ort_attempt/pages/attempt_history_page.dart';
+import 'package:synamyk/ui/ort_attempt/pages/attempt_result_page.dart';
+import 'package:synamyk/ui/ort_attempt/pages/attempt_run_page.dart';
+import 'package:synamyk/ui/ort_attempt/pages/test_detail_page.dart';
+import 'package:synamyk/ui/referral/pages/referral_page.dart';
+import 'package:synamyk/ui/school/pages/my_school_page.dart';
 import 'package:synamyk/ui/analyst/widgets/analyst_tabs_shell.dart';
 import 'package:synamyk/ui/auth/bloc/app_auth_bloc.dart';
 import 'package:synamyk/ui/auth/pages/new_password_page.dart';
@@ -25,7 +35,6 @@ import 'package:synamyk/ui/news/news_list/pages/news_page.dart';
 import 'package:synamyk/ui/notifications/pages/notifications_inbox_page.dart';
 import 'package:synamyk/ui/profile/pages/notification_settings_page.dart';
 import 'package:synamyk/ui/payment/pages/my_purchases_page.dart';
-import 'package:synamyk/ui/profile/pages/tests_history_page.dart';
 import 'package:synamyk/ui/payment/models/payment_confirm_args.dart';
 import 'package:synamyk/ui/payment/pages/payment_confirm_page.dart';
 import 'package:synamyk/ui/ort_tests/pages/ort_test_ai_analyst_page.dart';
@@ -41,8 +50,11 @@ import 'package:synamyk/ui/splash/pages/splash_page.dart';
 import 'package:synamyk/ui/analyst/video_lessons/pages/video_lessons_page.dart';
 import 'package:synamyk/ui/news/news_details/news_details_page.dart';
 
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
 GoRouter createRouter(AppAuthBloc authBloc) {
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/home',
     refreshListenable: StreamListenable(authBloc.stream),
     redirect: (context, state) {
@@ -167,11 +179,23 @@ GoRouter createRouter(AppAuthBloc authBloc) {
           ),
           StatefulShellBranch(
             routes: [
+              GoRoute(
+                path: '/game',
+                builder: (context, state) => const GameListPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
               ShellRoute(
                 builder: (context, state, child) {
                   return AnalystTabsShell(child: child);
                 },
                 routes: [
+                  GoRoute(
+                    path: '/results',
+                    builder: (context, state) => const AttemptHistoryPage(),
+                  ),
                   GoRoute(
                     path: '/analyst',
                     builder: (context, state) => const AnalystPage(),
@@ -181,14 +205,6 @@ GoRouter createRouter(AppAuthBloc authBloc) {
                     builder: (context, state) => const VideoLessonsPage(),
                   ),
                 ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/game',
-                builder: (context, state) => const GameListPage(),
               ),
             ],
           ),
@@ -212,18 +228,62 @@ GoRouter createRouter(AppAuthBloc authBloc) {
                         (context, state) => const NotificationSettingsPage(),
                   ),
                   GoRoute(
-                    path: 'tests_history',
-                    builder: (context, state) => const TestsHistoryPage(),
-                  ),
-                  GoRoute(
                     path: 'purchases',
                     builder: (context, state) => const MyPurchasesPage(),
+                  ),
+                  GoRoute(
+                    path: 'school',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => const MySchoolPage(),
                   ),
                 ],
               ),
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/tests/:testId',
+        builder:
+            (context, state) => TestDetailPage(
+              testId: int.parse(state.pathParameters['testId']!),
+            ),
+      ),
+      GoRoute(
+        path: '/attempts/:attemptId',
+        builder:
+            (context, state) => AttemptRunPage(
+              attemptId: int.parse(state.pathParameters['attemptId']!),
+            ),
+      ),
+      GoRoute(
+        path: '/attempts/:attemptId/result',
+        builder:
+            (context, state) => AttemptResultPage(
+              attemptId: int.parse(state.pathParameters['attemptId']!),
+              initial: state.extra as AttemptResult?,
+            ),
+      ),
+      GoRoute(
+        path: '/texts/:textId',
+        builder:
+            (context, state) => TextDetailPage(
+              textId: int.parse(state.pathParameters['textId']!),
+            ),
+      ),
+      GoRoute(
+        path: '/product/:code',
+        builder:
+            (context, state) =>
+                ProductPaymentPage(code: state.pathParameters['code']!),
+      ),
+      GoRoute(
+        path: '/referrals',
+        builder: (context, state) => const ReferralPage(),
+      ),
+      GoRoute(
+        path: '/game/leaderboard',
+        builder: (context, state) => const GameLeaderboardPage(),
       ),
       GoRoute(
         path: '/home/tests/:language',

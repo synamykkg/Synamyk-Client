@@ -119,6 +119,8 @@ class GameFinished extends GameBlocState {
     required this.draw,
     this.forfeitedByMe = false,
     this.forfeitedByOpponent = false,
+    this.ratingChange,
+    this.newRating,
   });
 
   final int myScore;
@@ -132,6 +134,12 @@ class GameFinished extends GameBlocState {
   /// True if the opponent forfeited the match.
   final bool forfeitedByOpponent;
 
+  /// My Elo change («+12» / «−9»); `null` if the server didn't send it.
+  final int? ratingChange;
+
+  /// My rating after the game.
+  final int? newRating;
+
   @override
   List<Object?> get props => [
     myScore,
@@ -140,6 +148,8 @@ class GameFinished extends GameBlocState {
     draw,
     forfeitedByMe,
     forfeitedByOpponent,
+    ratingChange,
+    newRating,
   ];
 }
 

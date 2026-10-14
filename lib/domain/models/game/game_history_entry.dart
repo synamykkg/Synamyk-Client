@@ -13,6 +13,8 @@ class GameHistoryEntry {
     required this.opponentName,
     required this.opponentAvatar,
     required this.playedAt,
+    this.ratingChange,
+    this.ratingAfter,
   });
 
   final int roomId;
@@ -28,6 +30,10 @@ class GameHistoryEntry {
   final String opponentName;
   final String? opponentAvatar;
   final DateTime? playedAt;
+
+  /// `null` for games played before ratings existed.
+  final int? ratingChange;
+  final int? ratingAfter;
 
   factory GameHistoryEntry.fromJson(Map<String, dynamic> json) {
     return GameHistoryEntry(
@@ -47,6 +53,8 @@ class GameHistoryEntry {
           json['playedAt'] != null
               ? DateTime.tryParse(json['playedAt'] as String)
               : null,
+      ratingChange: json['ratingChange'] as int?,
+      ratingAfter: json['ratingAfter'] as int?,
     );
   }
 }

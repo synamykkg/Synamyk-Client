@@ -10,7 +10,6 @@ class RootMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
 
       bottomNavigationBar: CustomBottomNavigationBar(
         navigationShell: navigationShell,

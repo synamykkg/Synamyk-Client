@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -92,15 +93,10 @@ class _SubTestHistoryPageState extends State<SubTestHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () => context.pop(),
-          ),
-          title: Text('История прохождений', style: AppTextStyles.appBarTitle),
-          centerTitle: true,
+        appBar: SyAppBar(
+          title: 'История прохождений',
         ),
         body: _buildBody(),
       ),
@@ -200,7 +196,7 @@ class _AttemptTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFEDF8F2),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(

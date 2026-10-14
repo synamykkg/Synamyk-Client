@@ -80,6 +80,8 @@ dependencies:
   cached_network_image: ^3.4.1
   http_parser: ^4.1.2
   flutter_math_fork: ^0.7.2
+  share_plus: ^11.1.0
+  math_expressions: ^3.2.0
 
 dev_dependencies:
   flutter_test:

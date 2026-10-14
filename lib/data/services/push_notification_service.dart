@@ -114,7 +114,7 @@ class PushNotificationService {
             importance: Importance.high,
             priority: Priority.high,
             icon: '@drawable/ic_notification',
-            color: const Color(0xFF7B1FA2),
+            color: const Color(0xFF6D35E0),
           ),
           iOS: const DarwinNotificationDetails(),
         ),

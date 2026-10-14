@@ -4,8 +4,10 @@ import 'package:synamyk/domain/models/ort_test/ort_sub_test_finish_result.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_question_result.dart';
 import 'package:synamyk/generated/l10n.dart';
 import 'package:synamyk/ui/core/ui/resources/app_strings.dart';
+import 'package:synamyk/ui/core/ui/themes/app_colors.dart';
+import 'package:synamyk/ui/core/ui/tr.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
-import 'package:synamyk/ui/ort_tests/pages/ort_test_page.dart';
 import 'package:synamyk/utils/format_duration.dart';
 
 /// Renders a finished sub-test session's result. Used both right after
@@ -26,110 +28,151 @@ class OrtTestCompletedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
+    final percent = finishResult.percentage.toDouble();
+    final ratio =
+        finishResult.totalQuestions == 0
+            ? 0.0
+            : finishResult.correctAnswers / finishResult.totalQuestions;
+    final canPop = Navigator.of(context).canPop();
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
+          pinned: true,
           automaticallyImplyLeading: false,
-          // actionsPadding: EdgeInsets.all(0)
-          titleSpacing: 0,
-          actionsPadding: EdgeInsets.zero, //
-
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          title: Text(l10n.levelOne, style: AppTextStyles.appBarTitle),
-        ),
-        SliverToBoxAdapter(
-          child: Column(
-            children: [
-              Text(l10n.yourResult, style: AppTextStyles.resultTitle),
-              Text(
-                l10n.resultSuccessMessage,
-                style: AppTextStyles.resultSubtitle,
-              ),
-              //
-            ],
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: const SizedBox.expand(
+            child: DecoratedBox(
+              decoration: BoxDecoration(gradient: AppColors.headerGradient),
+            ),
+          ),
+          leading:
+              canPop
+                  ? IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.of(context).maybePop(),
+                  )
+                  : null,
+          titleSpacing: canPop ? 0 : 20,
+          title: Text(
+            finishResult.subTestTitle.isNotEmpty
+                ? finishResult.subTestTitle
+                : l10n.yourResult,
+            style: AppTextStyles.h3.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: 100, // высота = половина ширины для полукруга
-                  child: CustomPaint(
-                    painter: SemiCircleProgressPainter(
-                      progress:
-                          (finishResult.correctAnswers /
-                              finishResult.totalQuestions),
-                    ), // 50%
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.emoji_events,
-                              color: Colors.orange,
-                              size: 30,
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              SyCard(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 150,
+                      height: 150,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox.expand(
+                            child: TweenAnimationBuilder<double>(
+                              tween: Tween(begin: 0, end: ratio),
+                              duration: const Duration(milliseconds: 900),
+                              curve: Curves.easeOutCubic,
+                              builder:
+                                  (_, v, _) => CircularProgressIndicator(
+                                    value: v,
+                                    strokeWidth: 12,
+                                    strokeCap: StrokeCap.round,
+                                    backgroundColor: AppColors.primarySoft,
+                                  ),
                             ),
-                            Text(
-                              '${finishResult.percentage}%',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.emoji_events_rounded,
+                                color: AppColors.gold,
+                                size: 28,
                               ),
-                            ),
-                            Text(l10n.correctAnswers),
-                          ],
+                              Text(
+                                '${percent.toStringAsFixed(percent == percent.roundToDouble() ? 0 : 1)}%',
+                                style: AppTextStyles.h1.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      l10n.yourResult,
+                      style: AppTextStyles.h3.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    if (finishResult.motivationalMessage.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        finishResult.motivationalMessage,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textSecondary,
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.only(top: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      l10n.correctAnswersOf(
-                        finishResult.correctAnswers,
-                        finishResult.totalQuestions,
-                      ),
-                      style: AppTextStyles.statValueGreen,
-                    ),
-                    Text(l10n.testLabel, style: AppTextStyles.statLabel),
+                    ],
                   ],
                 ),
-                Column(
+              ),
+              const SizedBox(height: 12),
+              SyCard(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 8,
+                ),
+                child: Row(
                   children: [
-                    Text(
-                      formatDuration(finishResult.timeTakenSeconds),
-                      style: AppTextStyles.statValueGreen,
+                    _Stat(
+                      icon: Icons.check_circle_rounded,
+                      color: AppColors.success,
+                      value: '${finishResult.correctAnswers}',
+                      label: context.tr('верно', 'туура'),
                     ),
-                    Text(l10n.timeLabel, style: AppTextStyles.statLabel),
+                    _Stat(
+                      icon: Icons.cancel_rounded,
+                      color: AppColors.danger,
+                      value: '${finishResult.wrongAnswers}',
+                      label: context.tr('ошибки', 'ката'),
+                    ),
+                    _Stat(
+                      icon: Icons.remove_circle_rounded,
+                      color: AppColors.textMuted,
+                      value: '${finishResult.skippedAnswers}',
+                      label: context.tr('пропущено', 'өткөрүлдү'),
+                    ),
+                    _Stat(
+                      icon: Icons.timer_rounded,
+                      color: AppColors.primary,
+                      value: formatDuration(finishResult.timeTakenSeconds),
+                      label: l10n.timeLabel,
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Center(
-              child: GestureDetector(
+              ),
+              const SizedBox(height: 12),
+              SyCard(
                 onTap: () {
                   showModalBottomSheet<void>(
                     useSafeArea: true,
@@ -145,40 +188,69 @@ class OrtTestCompletedView extends StatelessWidget {
                     },
                   );
                 },
-                child: Container(
-                  width: 166,
-                  height: 102,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF4E6FA),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 25,
-                        height: 25,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF4527A0).withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(Icons.close, color: Colors.white, size: 15),
-                      ),
-                      Text(
+                child: Row(
+                  children: [
+                    const SyIconTile(
+                      icon: Icons.auto_awesome_rounded,
+                      color: AppColors.pink,
+                      background: AppColors.pinkSoft,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
                         l10n.viewErrors,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.modalText,
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.textMuted,
+                    ),
+                  ],
                 ),
               ),
-            ),
+            ]),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _Stat extends StatelessWidget {
+  const _Stat({
+    required this.icon,
+    required this.color,
+    required this.value,
+    required this.label,
+  });
+
+  final IconData icon;
+  final Color color;
+  final String value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 22),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: AppTextStyles.h4.copyWith(fontWeight: FontWeight.w700),
+          ),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.textMuted),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -220,8 +292,10 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
       child: Scaffold(
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: GestureDetector(
-            onTap:
+          child: SyButton(
+            label: l10n.analyzeWithAi,
+            icon: Icons.auto_awesome_rounded,
+            onPressed:
                 selectedIds.isEmpty
                     ? null
                     : () {
@@ -235,27 +309,12 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                               .toList();
                       GoRouter.of(context).push(
                         '/ort_test/${widget.language}/${widget.id}/ai_analyst',
-
-                        // extra: selectedResults,
                         extra: {
                           'sessionId': widget.sessionId,
                           'results': selectedResults,
                         },
                       );
                     },
-            child: Container(
-              height: 56,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: selectedIds.isEmpty ? Colors.grey : Colors.black,
-              ),
-              child:  Center(
-                child: Text(
-                  l10n.analyzeWithAi,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
           ),
         ),
         body: Padding(
@@ -269,7 +328,9 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                 floating: false,
                 snap: false,
                 titleSpacing: 0,
-                title: Text(l10n.results, style: AppTextStyles.headlineLarge),
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                title: Text(l10n.results, style: AppTextStyles.h3.copyWith(fontWeight: FontWeight.w700)),
               ),
               SliverGrid.builder(
                 itemCount: widget.results.length,
@@ -306,7 +367,7 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                         border: Border.all(
                           color:
                               isSelected
-                                  ? Colors.purple
+                                  ? const Color(0xFF6D35E0)
                                   : const Color(
                                     0xFF252525,
                                   ).withOpacity(isSelectable ? 0.5 : 0.2),
@@ -364,7 +425,7 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
                                 width: 18,
                                 height: 18,
                                 decoration: BoxDecoration(
-                                  color: Colors.purple,
+                                  color: const Color(0xFF6D35E0),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: const Icon(

@@ -38,7 +38,7 @@ class OrtTestPage extends StatelessWidget {
           return Scaffold(
             bottomNavigationBar: SafeArea(
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                 child: BlocBuilder<OrtTestBloc, OrtTestState>(
                   builder: (context, state) {
                     return OrtTestBottomBarContent(
@@ -50,18 +50,15 @@ class OrtTestPage extends StatelessWidget {
                 ),
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: BlocConsumer<OrtTestBloc, OrtTestState>(
-                listener: (context, state) {},
-                builder: (context, state) {
-                  return OrtTestBodyContent(
-                    state: state,
-                    language: language,
-                    id: id,
-                  );
-                },
-              ),
+            body: BlocConsumer<OrtTestBloc, OrtTestState>(
+              listener: (context, state) {},
+              builder: (context, state) {
+                return OrtTestBodyContent(
+                  state: state,
+                  language: language,
+                  id: id,
+                );
+              },
             ),
           );
         },

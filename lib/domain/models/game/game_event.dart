@@ -119,6 +119,10 @@ class GameOverEvent extends GameEvent {
     required this.player2Score,
     required this.winnerId,
     this.forfeitedBy,
+    this.player1RatingChange,
+    this.player2RatingChange,
+    this.player1Rating,
+    this.player2Rating,
   });
 
   final int player1Score;
@@ -130,6 +134,14 @@ class GameOverEvent extends GameEvent {
   /// Id of the player who forfeited, if the game ended that way.
   final int? forfeitedBy;
 
+  /// Elo change after the game; `null` for the bot / older backends.
+  final int? player1RatingChange;
+  final int? player2RatingChange;
+
+  /// Rating after the game.
+  final int? player1Rating;
+  final int? player2Rating;
+
   factory GameOverEvent.fromJson(Map<String, dynamic> json) {
     return GameOverEvent(
       roomId: json['roomId'] as int,
@@ -137,6 +149,10 @@ class GameOverEvent extends GameEvent {
       player2Score: json['player2Score'] as int? ?? 0,
       winnerId: json['winnerId'] as int?,
       forfeitedBy: json['forfeitedBy'] as int?,
+      player1RatingChange: json['player1RatingChange'] as int?,
+      player2RatingChange: json['player2RatingChange'] as int?,
+      player1Rating: json['player1Rating'] as int?,
+      player2Rating: json['player2Rating'] as int?,
     );
   }
 }

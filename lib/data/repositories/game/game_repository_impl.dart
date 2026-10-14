@@ -3,7 +3,10 @@ import 'package:synamyk/config/app_config.dart';
 import 'package:synamyk/data/api/synamyk_api_client.dart';
 import 'package:synamyk/data/repositories/game/game_repository.dart';
 import 'package:synamyk/data/services/app_token_storage.dart';
+import 'package:synamyk/domain/models/common/json_read.dart';
+import 'package:synamyk/domain/models/common/paged_result.dart';
 import 'package:synamyk/domain/models/game/game_history_entry.dart';
+import 'package:synamyk/domain/models/game/game_rating.dart';
 import 'package:synamyk/domain/models/game/game_test_model.dart';
 import 'package:synamyk/domain/models/game/join_game_result.dart';
 import 'package:synamyk/domain/models/game/room_state.dart';
@@ -152,6 +155,48 @@ class GameRepositoryImpl implements GameRepository {
       return data
           .map((e) => GameHistoryEntry.fromJson(e as Map<String, dynamic>))
           .toList();
+    } on AppException {
+      rethrow;
+    } catch (e) {
+      throw ExceptionParser.parse(e);
+    }
+  }
+
+  @override
+  Future<GameRating> getMyRating() async {
+    try {
+      final response = await _dio.get(
+        '${AppConfig.baseUrl}/api/game/rating/me',
+        options: await _authOptions(),
+      );
+      final data = response.data;
+      if (data is! Map<String, dynamic>) {
+        throw AppException.unknown('Пустой ответ');
+      }
+      return GameRating.fromJson(data);
+    } on AppException {
+      rethrow;
+    } catch (e) {
+      throw ExceptionParser.parse(e);
+    }
+  }
+
+  @override
+  Future<PagedResult<GameRating>> getLeaderboard({
+    int page = 0,
+    int size = 50,
+  }) async {
+    try {
+      final response = await _dio.get(
+        '${AppConfig.baseUrl}/api/game/leaderboard',
+        queryParameters: {'page': page, 'size': size},
+        options: await _authOptions(),
+      );
+      final data = response.data;
+      if (data is! Map<String, dynamic>) {
+        throw AppException.unknown('Пустой ответ');
+      }
+      return readPage(data, GameRating.fromJson, page);
     } on AppException {
       rethrow;
     } catch (e) {

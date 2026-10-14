@@ -273,6 +273,9 @@ class GameBloc extends Bloc<GameBlocEvent, GameBlocState> {
             draw: draw,
             forfeitedByMe: forfeitedByMe,
             forfeitedByOpponent: forfeitedByOpponent,
+            ratingChange:
+                _amIPlayer1 ? e.player1RatingChange : e.player2RatingChange,
+            newRating: _amIPlayer1 ? e.player1Rating : e.player2Rating,
           ),
         );
         unawaited(_teardownSocket());

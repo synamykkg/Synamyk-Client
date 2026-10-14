@@ -127,7 +127,7 @@ class ChangePasswordModal extends StatelessWidget {
                                     state.newPassword.isEmpty ||
                                     state.confirmPassword.isEmpty
                                 ? Colors.grey
-                                : Colors.purple,
+                                : const Color(0xFF6D35E0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

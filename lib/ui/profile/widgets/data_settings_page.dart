@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:synamyk/generated/l10n.dart';
-import 'package:synamyk/ui/core/ui/resources/app_strings.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/profile/widgets/change_password_modal.dart';
 import 'package:synamyk/ui/profile/widgets/change_phone_modal.dart';
@@ -14,27 +13,14 @@ class DataSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = S.of(context);
     return SafeArea(
+      top: false,
       child: Scaffold(
+        appBar: SyAppBar(title: l10n.settingsData),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: CustomScrollView(
             slivers: [
-              SliverAppBar(
-                backgroundColor: Colors.white,
-                leading: BackButton(
-                  color: Colors.black,
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: Text(
-                    l10n.settingsData,
-                    style: AppTextStyles.appBarTitle,
-                  ),
-                ),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
               SliverList(
                 delegate: SliverChildListDelegate([

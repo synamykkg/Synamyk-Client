@@ -71,8 +71,8 @@ class CurvedNavigationBarState extends State<CurvedNavigationBar>
         if ((endingPos - _pos).abs() < (_startingPos - _pos).abs()) {
           _icon = widget.items[_endingIndex];
         }
-        _buttonHide =
-            (1 - ((middle - _pos) / (_startingPos - middle)).abs()).abs();
+        _buttonHide = (1 - ((middle - _pos) / (_startingPos - middle)).abs())
+            .abs();
       });
     });
   }
@@ -113,10 +113,9 @@ class CurvedNavigationBarState extends State<CurvedNavigationBar>
             widget.maxWidth ?? constraints.maxWidth,
           );
           return Align(
-            alignment:
-                textDirection == TextDirection.ltr
-                    ? Alignment.bottomLeft
-                    : Alignment.bottomRight,
+            alignment: textDirection == TextDirection.ltr
+                ? Alignment.bottomLeft
+                : Alignment.bottomRight,
             child: Container(
               color: widget.backgroundColor,
               width: maxWidth,
@@ -174,27 +173,26 @@ class CurvedNavigationBarState extends State<CurvedNavigationBar>
                       child: SizedBox(
                         height: 100.0,
                         child: Row(
-                          children:
-                              widget.items.map((item) {
-                                return NavButton(
-                                  onTap: _buttonTap,
-                                  position: _pos,
-                                  length: _length,
-                                  index: widget.items.indexOf(item),
-                                  child: Center(
-                                    child: Container(
-                                      width: 44,
-                                      height: 44,
-                                      // color: Colors.white,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      child: item,
-                                    ),
+                          children: widget.items.map((item) {
+                            return NavButton(
+                              onTap: _buttonTap,
+                              position: _pos,
+                              length: _length,
+                              index: widget.items.indexOf(item),
+                              child: Center(
+                                child: Container(
+                                  width: 44,
+                                  height: 44,
+                                  // color: Colors.white,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
                                   ),
-                                );
-                              }).toList(),
+                                  child: item,
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'package:synamyk/domain/enums/payment_status.dart';
 class PaymentHistoryEntry {
   PaymentHistoryEntry({
     required this.paymentId,
+    this.product,
     required this.testId,
     required this.testTitle,
     this.subTestId,
@@ -16,7 +17,12 @@ class PaymentHistoryEntry {
   });
 
   final String paymentId;
-  final int testId;
+
+  /// `TEST | SUB_TEST | ALL_TESTS | ALL_TEXTS`; `null` from older backends.
+  final String? product;
+
+  /// `null` for catalog products — [testTitle] then holds the product name.
+  final int? testId;
   final String testTitle;
 
   /// `null` when this payment was for the whole test (bundle).
@@ -39,7 +45,8 @@ class PaymentHistoryEntry {
   factory PaymentHistoryEntry.fromJson(Map<String, dynamic> json) {
     return PaymentHistoryEntry(
       paymentId: json['paymentId'] as String,
-      testId: json['testId'] as int,
+      product: json['product'] as String?,
+      testId: json['testId'] as int?,
       testTitle: json['testTitle'] as String? ?? '',
       subTestId: json['subTestId'] as int?,
       subTestTitle: json['subTestTitle'] as String?,

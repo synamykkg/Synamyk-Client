@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -128,17 +129,16 @@ class _NotificationsInboxPageState extends State<NotificationsInboxPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () => context.pop(),
-          ),
-          title: Text('Уведомления', style: AppTextStyles.appBarTitle),
-          centerTitle: true,
+        appBar: SyAppBar(
+          title: 'Уведомления',
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                disabledForegroundColor: Colors.white54,
+              ),
               onPressed: _entries.any((e) => !e.read) ? _markAllRead : null,
               child: const Text('Прочитать все'),
             ),
@@ -192,7 +192,7 @@ class _NotificationsInboxPageState extends State<NotificationsInboxPage> {
                 color:
                     entry.read
                         ? const Color(0xFFF6F6F6)
-                        : const Color(0xFFEDF8F2),
+                        : const Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -203,7 +203,7 @@ class _NotificationsInboxPageState extends State<NotificationsInboxPage> {
                       height: 8,
                       margin: const EdgeInsets.only(right: 12),
                       decoration: const BoxDecoration(
-                        color: Color(0xFF7B1FA2),
+                        color: Color(0xFF6D35E0),
                         shape: BoxShape.circle,
                       ),
                     ),

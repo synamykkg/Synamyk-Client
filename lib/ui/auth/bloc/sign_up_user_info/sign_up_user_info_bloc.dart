@@ -8,6 +8,7 @@ import 'package:synamyk/domain/enums/region.dart';
 
 import 'package:synamyk/domain/models/auth/registration_info.dart';
 import 'package:synamyk/domain/models/region/region_model.dart';
+import 'package:synamyk/domain/models/school/school_models.dart';
 import 'package:synamyk/ui/auth/bloc/app_auth_bloc.dart';
 
 part 'sign_up_user_info_event.dart';
@@ -45,8 +46,32 @@ class SignUpUserInfoBloc
       );
     });
     on<SignUpUserInfoRegionChanged>((event, emit) {
+      final changed = state.region?.id != event.region.id;
       emit(
-        state.copyWith(region: event.region, status: AuthStepStatus.initial),
+        state.copyWith(
+          region: event.region,
+          clearDistrict: changed,
+          clearSchool: changed,
+          status: AuthStepStatus.initial,
+        ),
+      );
+    });
+    on<SignUpUserInfoDistrictChanged>((event, emit) {
+      final changed = state.district?.id != event.district.id;
+      emit(
+        state.copyWith(
+          district: event.district,
+          clearSchool: changed,
+          status: AuthStepStatus.initial,
+        ),
+      );
+    });
+    on<SignUpUserInfoSchoolChanged>((event, emit) {
+      emit(state.copyWith(school: event.school, status: AuthStepStatus.initial));
+    });
+    on<SignUpUserInfoReferralCodeChanged>((event, emit) {
+      emit(
+        state.copyWith(referralCode: event.code, status: AuthStepStatus.initial),
       );
     });
     on<SignUpUserInfoSubmit>(_onSubmit);
@@ -85,6 +110,8 @@ class SignUpUserInfoBloc
         firstName: state.firstName,
         lastName: state.lastName,
         region: state.region!.id,
+        schoolId: state.school?.id,
+        referralCode: state.referralCode,
       );
       await _authRepository.saveUserInfo(info);
       _appAuthBloc.add(AppAuthLoggedIn());

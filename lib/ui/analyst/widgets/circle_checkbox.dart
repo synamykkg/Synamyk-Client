@@ -21,7 +21,7 @@ class CircleCheckbox extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: Colors.purple,
+            color: const Color(0xFF6D35E0),
             width: 2,
           ),
         ),
@@ -31,7 +31,7 @@ class CircleCheckbox extends StatelessWidget {
                   width: 10,
                   height: 10,
                   decoration: const BoxDecoration(
-                    color: Colors.purple,
+                    color: const Color(0xFF6D35E0),
                     shape: BoxShape.circle,
                   ),
                 ),

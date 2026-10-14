@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:synamyk/domain/enums/app_language.dart';
 import 'package:synamyk/generated/l10n.dart';
 import 'package:synamyk/ui/core/features/language/bloc/language_bloc.dart';
@@ -14,39 +14,16 @@ class LanguageChangePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = S.of(context);
     return SafeArea(
+      top: false,
       child: Scaffold(
+        appBar: SyAppBar(title: l10n.settingsLanguage),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: BlocBuilder<LanguageBloc, LanguageState>(
             builder: (context, state) {
               return CustomScrollView(
                 slivers: [
-                  SliverAppBar(
-                    // automaticallyImplyLeading: false,
-                    // titleSpacing: 0,
-
-                    // actionsPadding: EdgeInsets.zero,
-                    backgroundColor: Colors.white,
-                    leading: BackButton(
-                      color: Colors.black,
-                      onPressed: () {
-                        context.pop();
-                      },
-                    ),
-                    title: Text(
-                      l10n.settingsLanguage,
-                      style: AppTextStyles.appBarTitle,
-                    ),
-
-                    // flexibleSpace: FlexibleSpaceBar(
-
-                    //   // centerTitle: true,
-                    //   title: Text(
-                    //     AppStrings.profileTitle,
-                    //     style: AppTextStyles.appBarTitle,
-                    //   ),
-                    // ),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
                   SliverList(
                     delegate: SliverChildListDelegate([

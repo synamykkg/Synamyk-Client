@@ -123,7 +123,7 @@ class NewPasswordPage extends StatelessWidget {
                             ResetPasswordSubmit(resetToken),
                           );
                         },
-                        color: const Color(0xFF7B1FA2),
+                        color: const Color(0xFF6D35E0),
                         textColor: Colors.white,
                         isLoading:
                             state.status == ResetPasswordNewStatus.loading,

@@ -1,3 +1,5 @@
+import 'package:synamyk/domain/models/figure/figure.dart';
+
 class GameOption {
   GameOption({required this.id, required this.text});
 
@@ -15,12 +17,16 @@ class GameQuestion {
     required this.text,
     required this.imageUrl,
     required this.options,
+    this.figure,
   });
 
   final int id;
   final String text;
   final String? imageUrl;
   final List<GameOption> options;
+
+  /// Drawing (coordinate plane / geometry); `null` if none.
+  final Figure? figure;
 
   factory GameQuestion.fromJson(Map<String, dynamic> json) {
     return GameQuestion(
@@ -31,6 +37,7 @@ class GameQuestion {
           ((json['options'] as List?) ?? [])
               .map((e) => GameOption.fromJson(e as Map<String, dynamic>))
               .toList(),
+      figure: Figure.tryParse(json['figure']),
     );
   }
 }

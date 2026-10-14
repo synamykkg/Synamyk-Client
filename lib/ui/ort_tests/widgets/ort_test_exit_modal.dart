@@ -74,7 +74,7 @@ class OrtTestExitModal extends StatelessWidget {
                           // l10n.exitTestConfirm,
                           confirmText,
                           style: AppTextStyles.bodyMedium.copyWith(
-                            color: Color(0xFF7B1FA2),
+                            color: Color(0xFF6D35E0),
                           ),
                         ),
                       ),
@@ -86,7 +86,7 @@ class OrtTestExitModal extends StatelessWidget {
                       width: 130,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: Color(0xFF7B1FA2),
+                        color: Color(0xFF6D35E0),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Center(

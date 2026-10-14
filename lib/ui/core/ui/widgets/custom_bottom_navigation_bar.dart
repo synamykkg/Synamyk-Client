@@ -1,69 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:synamyk/config/bottom_navigation_bar_icons.dart';
-import 'package:synamyk/generated/l10n.dart';
-import 'package:synamyk/l10n/generated/app_localizations.dart';
-import 'package:synamyk/ui/core/ui/widgets/curved_bottom_bar/curved_bottom_bar.dart';
+import 'package:synamyk/ui/core/ui/themes/app_colors.dart';
+import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
+import 'package:synamyk/ui/core/ui/tr.dart';
 
-// class CustomBottomNavigationBar extends StatelessWidget {
-//   const CustomBottomNavigationBar({super.key, required this.navigationShell});
-
-//   final StatefulNavigationShell navigationShell;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return CurvedNavigationBar(
-//       index: navigationShell.currentIndex,
-//       items: [
-//         Column(
-//           children: [
-//             Container(
-//               width: 50,
-//               height: 50,
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(100),
-//                 color: Colors.white,
-//               ),
-//               child: Icon(Icons.add, size: 30),
-//             ),
-//             Text('Главная'),
-//           ],
-//         ),
-//         Column(
-//           children: [
-//             Container(
-//               width: 50,
-//               height: 50,
-//               decoration: BoxDecoration(
-//                 borderRadius: BorderRadius.circular(100),
-//                 color: Colors.white,
-//               ),
-//               child: Icon(Icons.list, size: 30),
-//             ),
-//             Text('Лента'),
-//           ],
-//         ),
-//         Column(
-//           children: [Icon(Icons.compare_arrows, size: 30), Text('Профиль')],
-//         ),
-//       ],
-//       color: Colors.blue,
-//       buttonBackgroundColor: Colors.white,
-//       backgroundColor: Colors.white,
-//       // animationCurve: Curves.bounceIn,
-//       animationDuration: Duration(milliseconds: 300),
-//       onTap:
-//           (index) => navigationShell.goBranch(
-//             index,
-//             initialLocation: index == navigationShell.currentIndex,
-//           ),
-//       // height: 75,
-//     );
-//   }
-// }
-
+/// Flat white tab bar: Негизги · Рейтинг · Оюндар · Жыйынтык · Профиль.
+/// Branch order must match the `StatefulShellRoute` in `router.dart`.
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({super.key, required this.navigationShell});
 
@@ -71,208 +13,118 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final l10n = S.of(context);  // ← добавь
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFFDFDFDF).withOpacity(0.55),
-                blurRadius: 20,
-                offset: Offset(0, -5),
-              ),
-            ],
-          ),
-          child: Stack(
-            // alignment: Alignment.bottomCenter,
-            children: [
-              CurvedNavigationBar(
-                index: navigationShell.currentIndex,
-                items: [
-                  // Icon(
-                  //   SynamykBottomBarStyle.trend_up,
-                  //   size: 30,
-                  //   color:
-                  //       navigationShell.currentIndex == 0
-                  //           ? Color(0xFF7B1FA2)
-                  //           : Color(0XFFB3B3B3),
-                  // )
-                  // ,
-                  SvgPicture.asset(
-                    'assets/icons/navigation_bar/home-2.svg',
-                    // color: Colors.red,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
-                    colorFilter: ColorFilter.mode(
-                      navigationShell.currentIndex == 0
-                          ? Color(0xFF7B1FA2)
-                          : Color(0XFFB3B3B3),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/navigation_bar/ranking.svg',
-                    // color: Colors.red,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
-                    colorFilter: ColorFilter.mode(
-                      navigationShell.currentIndex == 1
-                          ? Color(0xFF7B1FA2)
-                          : Color(0XFFB3B3B3),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/navigation_bar/trend-up.svg',
-                    // color: Colors.red,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
-                    colorFilter: ColorFilter.mode(
-                      navigationShell.currentIndex == 2
-                          ? Color(0xFF7B1FA2)
-                          : Color(0XFFB3B3B3),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/navigation_bar/award.svg',
-                    // color: Colors.red,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
-                    colorFilter: ColorFilter.mode(
-                      navigationShell.currentIndex == 3
-                          ? Color(0xFF7B1FA2)
-                          : Color(0XFFB3B3B3),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  SvgPicture.asset(
-                    'assets/icons/navigation_bar/frame.svg',
-                    // color: Colors.red,
-                    height: 24,
-                    width: 24,
-                    fit: BoxFit.scaleDown,
-                    colorFilter: ColorFilter.mode(
-                      navigationShell.currentIndex == 4
-                          ? Color(0xFF7B1FA2)
-                          : Color(0XFFB3B3B3),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ],
+    final items = [
+      (
+        Icons.home_outlined,
+        Icons.home_rounded,
+        context.tr('Главная', 'Негизги'),
+      ),
+      (
+        Icons.bar_chart_outlined,
+        Icons.bar_chart_rounded,
+        context.tr('Рейтинг', 'Рейтинг'),
+      ),
+      (
+        Icons.sports_esports_outlined,
+        Icons.sports_esports_rounded,
+        context.tr('Игры', 'Оюндар'),
+      ),
+      (
+        Icons.history_rounded,
+        Icons.history_rounded,
+        context.tr('Итоги', 'Жыйынтык'),
+      ),
+      (
+        Icons.person_outline_rounded,
+        Icons.person_rounded,
+        context.tr('Профиль', 'Профиль'),
+      ),
+    ];
+    final current = navigationShell.currentIndex;
 
-                color: const Color(0xFFFFFFFF),
-                // color: Theme.of(context).scaffoldBackgroundColor, //
-                // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                // buttonBackgroundColor: const Color(0xFFFFFFFF),
-                backgroundColor: Colors.transparent,
-                animationDuration: const Duration(milliseconds: 300),
-                onTap: (index) {
-                  navigationShell.goBranch(
-                    index,
-                    initialLocation: index == navigationShell.currentIndex,
-                  );
-                },
-                animationCurve: Curves.easeOutBack,
-              ),
-
-              /// ТЕКСТ ВНУТРИ БАРА
-              Positioned(
-                bottom: 8,
-                left: 0,
-                right: 0,
-                child: Row(
-                  // spacing: 10,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _NavLabel(
-                      title: l10n.navHome,
-                      offsetY: 0,
-                      color:
-                          navigationShell.currentIndex == 0
-                              ? Color(0xFF7B1FA2)
-                              : Color(0XFFB3B3B3),
-                    ),
-                    _NavLabel(
-                      title: l10n.navFeed,
-                      offsetY: 0,
-                      color:
-                          navigationShell.currentIndex == 1
-                              ? Color(0xFF7B1FA2)
-                              : Color(0XFFB3B3B3),
-                    ),
-                    _NavLabel(
-                      title: l10n.navAnalysis,
-                      offsetY: 0,
-                      color:
-                          navigationShell.currentIndex == 2
-                              ? Color(0xFF7B1FA2)
-                              : Color(0XFFB3B3B3),
-                    ),
-                    _NavLabel(
-                      title: 'Игра',
-                      offsetY: 0,
-                      color:
-                          navigationShell.currentIndex == 3
-                              ? Color(0xFF7B1FA2)
-                              : Color(0XFFB3B3B3),
-                    ),
-                    _NavLabel(
-                      title: l10n.navProfile,
-                      offsetY: 0,
-                      color:
-                          navigationShell.currentIndex == 4
-                              ? Color(0xFF7B1FA2)
-                              : Color(0XFFB3B3B3),
-                    ),
-                  ],
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        height: 68,
+        margin: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x1F4A22B0),
+              blurRadius: 24,
+              offset: Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            for (var i = 0; i < items.length; i++)
+              Expanded(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap:
+                      () => navigationShell.goBranch(
+                        i,
+                        initialLocation: i == current,
+                      ),
+                  child: _NavItem(
+                    icon: i == current ? items[i].$2 : items[i].$1,
+                    label: items[i].$3,
+                    active: i == current,
+                  ),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
-        Container(
-          height: MediaQuery.of(context).padding.bottom,
-          color: const Color(0xFFFFFFFF),
-        ),
-      ],
+      ),
     );
   }
 }
 
-class _NavLabel extends StatelessWidget {
-  const _NavLabel({
-    required this.title,
-    required this.offsetY,
-    required this.color,
+class _NavItem extends StatelessWidget {
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.active,
   });
 
-  final String title;
-  final double offsetY;
-  final Color color;
+  final IconData icon;
+  final String label;
+  final bool active;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Transform.translate(
-        offset: Offset(0, offsetY),
-        child: Center(
-          child: Text(
-            title,
-            style: GoogleFonts.inter(
-              color: color,
-              fontSize: 10,
-              fontWeight: FontWeight.w400,
-            ),
+    final color = active ? AppColors.primary : AppColors.textMuted;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
+          decoration: BoxDecoration(
+            gradient: active ? AppColors.headerGradient : null,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: active ? Colors.white : color, size: 22),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.caption.copyWith(
+            fontSize: 11,
+            color: color,
+            fontWeight: active ? FontWeight.w600 : FontWeight.w500,
           ),
         ),
-      ),
+      ],
     );
   }
 }

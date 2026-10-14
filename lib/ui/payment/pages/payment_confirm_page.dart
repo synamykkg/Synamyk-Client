@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:synamyk/data/repositories/payment/payment_repository.dart';
 import 'package:synamyk/error/app_exception.dart';
 import 'package:synamyk/ui/auth/widgets/button_for_auth.dart';
@@ -26,9 +26,14 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
     try {
       final repository = GetIt.I<PaymentRepository>();
       final paymentInfo =
-          widget.args.target == PaymentTarget.subTest
-              ? await repository.initPaymentForSubTest(widget.args.subTestId!)
-              : await repository.initPaymentForTest(widget.args.testId);
+          switch (widget.args.target) {
+            PaymentTarget.subTest =>
+              await repository.initPaymentForSubTest(widget.args.subTestId!),
+            PaymentTarget.test =>
+              await repository.initPaymentForTest(widget.args.testId!),
+            PaymentTarget.product =>
+              await repository.initPaymentForProduct(widget.args.productCode!),
+          };
       if (!mounted) return;
 
       await Navigator.of(context).push(
@@ -54,15 +59,10 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () => context.pop(),
-          ),
-          title: Text('Оплата', style: AppTextStyles.appBarTitle),
-          centerTitle: true,
+        appBar: SyAppBar(
+          title: 'Оплата',
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -83,7 +83,7 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEDF8F2),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
@@ -103,7 +103,7 @@ class _PaymentConfirmPageState extends State<PaymentConfirmPage> {
                   isValid: true,
                   isLoading: _isLoading,
                   text: 'Оплатить',
-                  color: const Color(0xFF7B1FA2),
+                  color: const Color(0xFF6D35E0),
                   textColor: Colors.white,
                   onTap: _pay,
                 ),

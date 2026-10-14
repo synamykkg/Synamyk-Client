@@ -6,10 +6,10 @@ class ShowModalBottomSheetRegions {
   const ShowModalBottomSheetRegions({
     required this.items,
     required this.onChanged,
-    this.region, 
+    this.region,
   });
 
-  final ValueChanged<int?> onChanged; 
+  final ValueChanged<int?> onChanged;
   final List<Region> items;
   final Region? region;
 

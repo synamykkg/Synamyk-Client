@@ -109,7 +109,7 @@ class _ChangeRegionModalContent extends StatelessWidget {
                         backgroundColor:
                             state.selectedRegion == null
                                 ? Colors.grey
-                                : Colors.purple,
+                                : const Color(0xFF6D35E0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

@@ -149,7 +149,7 @@ class _ChangePhoneModalContentState extends State<_ChangePhoneModalContent> {
                         backgroundColor:
                             state.oldPhone.isEmpty || state.newPhone.isEmpty
                                 ? Colors.grey
-                                : Colors.purple,
+                                : const Color(0xFF6D35E0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

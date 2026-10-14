@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:synamyk/generated/l10n.dart';
+import 'package:synamyk/ui/core/ui/themes/app_colors.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
+import 'package:synamyk/ui/core/ui/tr.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
+import 'package:synamyk/ui/ort_attempt/widgets/attempt_question_card.dart';
 import 'package:synamyk/ui/ort_tests/bloc/ort_test_bloc.dart';
 import 'package:synamyk/ui/ort_tests/widgets/ort_test_exit_modal.dart';
 import 'package:synamyk/utils/format_duration.dart';
@@ -50,155 +54,153 @@ class OrtTestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ortTest = state.ortTestList;
+    final question = state.ortTestList;
     final l10n = S.of(context);
+    final total = question.totalQuestions == 0 ? 1 : question.totalQuestions;
+    final low = state.duration <= 60;
 
     return CustomScrollView(
       slivers: [
         SliverAppBar(
+          pinned: true,
           automaticallyImplyLeading: false,
-          // actionsPadding: EdgeInsets.all(0)
-          leadingWidth: 20,
-          titleSpacing: 0,
-          actionsPadding: EdgeInsets.zero, //
-          leading: GestureDetector(
-            onTap: () {
-              // context.go('/home/');
-              _showExitModal(context, l10n);
-            },
-            child: Container(child: Icon(Icons.close, color: Colors.black)),
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          flexibleSpace: const SizedBox.expand(
+            child: DecoratedBox(
+              decoration: BoxDecoration(gradient: AppColors.headerGradient),
+            ),
           ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          title: Text(l10n.levelOne, style: AppTextStyles.appBarTitle),
+          leading: IconButton(
+            icon: const Icon(Icons.close_rounded, color: Colors.white),
+            onPressed: () => _showExitModal(context, l10n),
+          ),
+          titleSpacing: 0,
+          title: Text(
+            question.sectionName.isNotEmpty
+                ? question.sectionName
+                : state.ortTest.subTestTitle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.h3.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48),
-            child: Column(
-              spacing: 8,
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  height: 4,
-                  width: 350,
-                  child: LinearProgressIndicator(
-                    value: ortTest.index / ortTest.totalQuestions,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+            preferredSize: const Size.fromHeight(58),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 16, 14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.contact_support, size: 16),
                         Text(
-                          '${ortTest.index}/${ortTest.totalQuestions}',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF666666),
+                          '${question.index + 1} / ${question.totalQuestions}',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
                           ),
+                        ),
+                        const SizedBox(height: 6),
+                        SyProgressBar(
+                          value: question.index / total,
+                          color: Colors.white,
+                          trackColor: Colors.white.withValues(alpha: 0.25),
                         ),
                       ],
                     ),
-                    Row(
+                  ),
+                  const SizedBox(width: 14),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 7,
+                    ),
+                    decoration: BoxDecoration(
+                      color: low ? AppColors.danger : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
                       children: [
+                        Icon(
+                          Icons.timer_outlined,
+                          size: 18,
+                          color: low ? Colors.white : AppColors.primary,
+                        ),
+                        const SizedBox(width: 5),
                         Text(
                           formatDuration(state.duration),
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF666666),
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: low ? Colors.white : AppColors.primary,
                           ),
                         ),
-                        Icon(Icons.access_time_outlined, size: 16),
                       ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-
-        SliverToBoxAdapter(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MathText(ortTest.text, style: AppTextStyles.questionTitle),
-              // Text(
-              //   state.ortTestList[state.pages].question,
-              //   style: AppTextStyles.questionText,
-              // ),
-            ],
-          ),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((
-            BuildContext context,
-            int index,
-          ) {
-            final isSelected = state.variants.contains(ortTest.options[index]);
-            return Card(
-              // borderOnForeground: false,
-              elevation: 0,
-              // margin: const EdgeInsets.all(15),
-              child: GestureDetector(
-                onTap: () {
-                  context.read<OrtTestBloc>().add(
-                    SelectVariantTest(variant: ortTest.options[index]),
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      style: isSelected ? BorderStyle.solid : BorderStyle.none,
-                      color: const Color.fromARGB(255, 147, 37, 167),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          sliver: SliverToBoxAdapter(
+            child: SyCard(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    context.tr(
+                      'Вопрос ${question.index + 1}',
+                      '${question.index + 1}-суроо',
                     ),
-                    color: Color(0xFFF6F6F6),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: 350,
-                  constraints: const BoxConstraints(minHeight: 52),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
-                      vertical: 12,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 12,
-                      children: [
-                        Container(
-                          width: 28,
-                          height: 28,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF6F6F6),
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                              width: isSelected ? 7 : 2,
-                              color: const Color.fromARGB(255, 147, 37, 167),
-                            ),
-                          ),
-                        ),
-                        Text(
-                          ortTest.options[index].label,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                        Expanded(
-                          child: MathText(
-                            ortTest.options[index].text,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      ],
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textMuted,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  MathText(
+                    question.text,
+                    style: AppTextStyles.h4.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                      height: 1.35,
+                    ),
+                  ),
+                  if (question.imageUrl.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: Image.network(
+                        question.imageUrl,
+                        errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 14),
+                  for (final option in question.options) ...[
+                    AnswerOptionTile(
+                      label: option.label,
+                      text: option.text,
+                      selected: state.variants.contains(option),
+                      onTap:
+                          () => context.read<OrtTestBloc>().add(
+                            SelectVariantTest(variant: option),
+                          ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ],
               ),
-            );
-          }, childCount: state.ortTestList.options.length),
+            ),
+          ),
         ),
       ],
     );

@@ -221,7 +221,7 @@ class SignUpPage extends StatelessWidget {
                       onTap: () {
                         context.read<SignUpBloc>().add(SubmitSignUp());
                       },
-                      color: Color(0xFF7B1FA2),
+                      color: Color(0xFF6D35E0),
                       textColor: Colors.white,
                     ),
                   ),

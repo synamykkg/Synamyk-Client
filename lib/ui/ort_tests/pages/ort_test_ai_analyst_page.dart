@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:synamyk/data/repositories/ort_tests/ort_tests_repository.dart';
@@ -6,7 +7,6 @@ import 'package:synamyk/domain/models/ort_test/ort_sub_test_finish_result.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_question.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_question_result.dart';
 import 'package:synamyk/generated/l10n.dart';
-import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/ort_tests/bloc/ai_analyst/ort_test_ai_analyst_bloc.dart';
 import 'package:synamyk/widgets/math_text.dart';
 
@@ -29,17 +29,12 @@ class OrtTestAiAnalystPage extends StatelessWidget {
               OrtTestAiAnalystBloc(GetIt.I<OrtTestsRepository>())
                 ..add(LoadAiAnalysis(sessionId, results)),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.aiAnalysis, style: AppTextStyles.appBarTitle),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          elevation: 0,
-        ),
+        appBar: SyAppBar(title: l10n.aiAnalysis),
         body: BlocBuilder<OrtTestAiAnalystBloc, OrtTestAiAnalystState>(
           builder: (context, state) {
             if (state is OrtTestAiAnalystLoading) {
               return const Center(
-                child: CircularProgressIndicator(color: Colors.black),
+                child: CircularProgressIndicator(),
               );
             } else if (state is OrtTestAiAnalystFailure) {
               return Center(child: Text(state.message));
@@ -95,10 +90,10 @@ class OrtTestAiAnalystPage extends StatelessWidget {
                           width: double.infinity,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.purple.withOpacity(0.1),
+                            color: const Color(0xFF6D35E0).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: Colors.purple.withOpacity(0.3),
+                              color: const Color(0xFF6D35E0).withOpacity(0.3),
                             ),
                           ),
                           child: Column(
@@ -108,7 +103,7 @@ class OrtTestAiAnalystPage extends StatelessWidget {
                                 l10n.yourAnswer,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.purple,
+                                  color: const Color(0xFF6D35E0),
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

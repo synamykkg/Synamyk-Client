@@ -165,7 +165,7 @@ class SignUpConfirmPage extends StatelessWidget {
                         );
                       },
                       color: Color(0xFFFFFFFF),
-                      textColor: Color(0xFF7B1FA2),
+                      textColor: Color(0xFF6D35E0),
                     ),
                   ),
                 ],

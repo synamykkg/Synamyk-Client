@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:synamyk/data/repositories/notifications/notifications_repository.dart';
 import 'package:synamyk/domain/models/notifications/notification_settings.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
@@ -53,18 +53,10 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () => context.pop(),
-          ),
-          title: Text(
-            'Настройки уведомлений',
-            style: AppTextStyles.appBarTitle,
-          ),
-          centerTitle: true,
+        appBar: SyAppBar(
+          title: 'Настройки уведомлений',
         ),
         body: FutureBuilder<NotificationSettings>(
           future: _future,

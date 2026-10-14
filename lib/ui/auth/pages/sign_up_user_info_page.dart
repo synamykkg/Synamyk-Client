@@ -14,6 +14,8 @@ import 'package:synamyk/ui/auth/widgets/button_for_auth.dart';
 import 'package:synamyk/ui/auth/widgets/header_auth.dart';
 import 'package:synamyk/ui/auth/widgets/select_option_for_auth.dart';
 import 'package:synamyk/ui/auth/widgets/text_field_for_auth.dart';
+import 'package:synamyk/ui/core/ui/tr.dart';
+import 'package:synamyk/ui/school/widgets/school_pickers.dart';
 import 'package:synamyk/utils/app_messenger.dart';
 
 class SignUpUserInfoPage extends StatelessWidget {
@@ -108,17 +110,68 @@ class SignUpUserInfoPage extends StatelessWidget {
                       },
                     ),
                   ),
+                  if (state.region != null) ...[
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: SizedBox(
+                          width: 350,
+                          child: SySelectField(
+                            label: context.tr('Район (необязательно)', 'Район (милдеттүү эмес)'),
+                            value: state.district?.localizedName(context.isKy),
+                            onTap: () async {
+                              final bloc = context.read<SignUpUserInfoBloc>();
+                              final district = await showDistrictPicker(context, state.region!.id);
+                              if (district != null) bloc.add(SignUpUserInfoDistrictChanged(district));
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (state.district != null) ...[
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: SizedBox(
+                          width: 350,
+                          child: SySelectField(
+                            label: context.tr('Школа (необязательно)', 'Мектеп (милдеттүү эмес)'),
+                            value: state.school?.localizedName(context.isKy),
+                            icon: Icons.search_rounded,
+                            onTap: () async {
+                              final bloc = context.read<SignUpUserInfoBloc>();
+                              final school = await showSchoolPicker(context, state.district!.id);
+                              if (school != null) bloc.add(SignUpUserInfoSchoolChanged(school));
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  SliverToBoxAdapter(
+                    child: TextFieldForAuth(
+                      text: context.tr('Код друга (необязательно)', 'Досуңдун коду (милдеттүү эмес)'),
+                      onChanged: (value) {
+                        context.read<SignUpUserInfoBloc>().add(
+                          SignUpUserInfoReferralCodeChanged(value),
+                        );
+                      },
+                    ),
+                  ),
                   SliverToBoxAdapter(child: SizedBox(height: 40)),
                   SliverToBoxAdapter(
                     child: ButtonForAuth(
                       isValid: state.isValid,
+                      isLoading: state.status == AuthStepStatus.loading,
                       text: 'Завершить регистрацию',
                       onTap: () {
                         context.read<SignUpUserInfoBloc>().add(
                           SignUpUserInfoSubmit(),
                         );
                       },
-                      color: Color(0xFF7B1FA2),
+                      color: Color(0xFF6D35E0),
                       textColor: Colors.white,
                     ),
                   ),

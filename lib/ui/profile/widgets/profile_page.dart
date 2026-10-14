@@ -14,7 +14,10 @@ import 'package:synamyk/data/repositories/user/image/image_repository.dart';
 import 'package:synamyk/data/repositories/user/user_repository.dart';
 import 'package:synamyk/generated/l10n.dart';
 import 'package:synamyk/ui/auth/bloc/app_auth_bloc.dart';
+import 'package:synamyk/ui/core/ui/themes/app_colors.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
+import 'package:synamyk/ui/core/ui/tr.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:synamyk/ui/core/ui/resources/app_strings.dart';
 import 'package:synamyk/ui/ort_tests/widgets/ort_test_exit_modal.dart';
 import 'package:synamyk/ui/profile/bloc/change_user_info/change_user_info_bloc.dart';
@@ -44,6 +47,7 @@ class ProfilePage extends StatelessWidget {
         BlocProvider(create: (context) => ChangeUserInfoBloc()),
       ],
       child: Scaffold(
+        appBar: SyAppBar(title: l10n.profileTitle, showBack: false),
         bottomNavigationBar: BlocBuilder<AppAuthBloc, AppAuthState>(
           builder: (context, state) {
             return SafeArea(
@@ -137,16 +141,7 @@ class ProfilePage extends StatelessWidget {
                   },
                   child: CustomScrollView(
                     slivers: [
-                      SliverAppBar(
-                        backgroundColor: Colors.white,
-                        flexibleSpace: FlexibleSpaceBar(
-                          centerTitle: true,
-                          title: Text(
-                            l10n.profileTitle,
-                            style: AppTextStyles.appBarTitle,
-                          ),
-                        ),
-                      ),
+                      const SliverToBoxAdapter(child: SizedBox(height: 20)),
                       SliverToBoxAdapter(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,14 +225,14 @@ class ProfilePage extends StatelessWidget {
                             height: 32,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFE5E5E5),
+                                backgroundColor: AppColors.primarySoft,
                                 elevation: 0,
                                 padding: const EdgeInsets.all(8),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(48),
                                   side: const BorderSide(
                                     width: 1,
-                                    color: Color(0xFFE5E5E5),
+                                    color: AppColors.primarySoft,
                                   ),
                                 ),
                               ),
@@ -636,10 +631,29 @@ class ProfilePage extends StatelessWidget {
 
                       SliverList(
                         delegate: SliverChildListDelegate([
+                          const SizedBox(height: 20),
+                          const _InviteBanner(),
+                          const SizedBox(height: 12),
+                          _ProfileMenuItem(
+                            icon: Icons.school_rounded,
+                            iconColor: AppColors.primary,
+                            iconBackground: AppColors.primarySoft,
+                            label: context.tr('Моя школа', 'Менин мектебим'),
+                            onTap: () => context.push('/profile/school'),
+                          ),
+                          const SizedBox(height: 12),
+                          _ProfileMenuItem(
+                            icon: Icons.leaderboard_rounded,
+                            iconColor: AppColors.pink,
+                            iconBackground: AppColors.pinkSoft,
+                            label: context.tr('Лидеры игр', 'Оюн лидерлери'),
+                            onTap: () => context.push('/game/leaderboard'),
+                          ),
+                          const SizedBox(height: 12),
                           _ProfileMenuItem(
                             icon: Icons.tune_rounded,
-                            iconColor: const Color(0xFF7B1FA2),
-                            iconBackground: const Color(0xFFF4E6FA),
+                            iconColor: const Color(0xFF6D35E0),
+                            iconBackground: const Color(0xFFF0EAFE),
                             label: l10n.settingsData,
                             onTap: () => context.push('/profile/data_settings'),
                           ),
@@ -664,20 +678,13 @@ class ProfilePage extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           _ProfileMenuItem(
-                            icon: Icons.history_rounded,
-                            iconColor: const Color(0xFF00897B),
-                            iconBackground: const Color(0xFFDCF3F0),
-                            label: 'История тестов',
-                            onTap: () => context.push('/profile/tests_history'),
-                          ),
-                          const SizedBox(height: 12),
-                          _ProfileMenuItem(
                             icon: Icons.receipt_long_rounded,
                             iconColor: const Color(0xFF2E7D32),
                             iconBackground: const Color(0xFFE8F5E9),
                             label: 'Мои покупки',
                             onTap: () => context.push('/profile/purchases'),
                           ),
+                          const SizedBox(height: 24),
                         ]),
                       ),
                     ],
@@ -720,8 +727,9 @@ class _ProfileMenuItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F8F8),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: AppColors.cardShadow,
         ),
         child: Row(
           children: [
@@ -783,16 +791,16 @@ void _showAvatarActionsSheet(
               _SheetActionButton(
                 icon: Icons.photo_camera_outlined,
                 label: 'Сделать фото',
-                color: const Color(0xFF7B1FA2),
-                background: const Color(0xFFF4E6FA),
+                color: const Color(0xFF6D35E0),
+                background: const Color(0xFFF0EAFE),
                 onTap: () => pick(ImageSource.camera),
               ),
               const SizedBox(height: 10),
               _SheetActionButton(
                 icon: Icons.photo_library_outlined,
                 label: 'Выбрать из галереи',
-                color: const Color(0xFF7B1FA2),
-                background: const Color(0xFFF4E6FA),
+                color: const Color(0xFF6D35E0),
+                background: const Color(0xFFF0EAFE),
                 onTap: () => pick(ImageSource.gallery),
               ),
               if (hasAvatar) ...[
@@ -893,7 +901,7 @@ class _ProfileAvatar extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: Colors.amber,
+                gradient: hasAvatar ? null : AppColors.headerGradient,
                 borderRadius: BorderRadius.circular(24),
                 image:
                     hasAvatar
@@ -910,7 +918,7 @@ class _ProfileAvatar extends StatelessWidget {
                         )
                         : null,
               ),
-              child: !hasAvatar ? const Icon(Icons.person) : null,
+              child: !hasAvatar ? const Icon(Icons.person_rounded, color: Colors.white, size: 32) : null,
             ),
             if (isUpdating)
               Positioned(
@@ -942,7 +950,7 @@ class _ProfileAvatar extends StatelessWidget {
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF7B1FA2),
+                  color: const Color(0xFF6D35E0),
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
                 ),
@@ -954,6 +962,63 @@ class _ProfileAvatar extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// «Пригласи друга» entry: the most valuable action on the profile.
+class _InviteBanner extends StatelessWidget {
+  const _InviteBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      borderRadius: BorderRadius.circular(18),
+      clipBehavior: Clip.antiAlias,
+      child: Ink(
+        decoration: const BoxDecoration(gradient: AppColors.headerGradient),
+        child: InkWell(
+          onTap: () => context.push('/referrals'),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.card_giftcard_rounded, color: Colors.white),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.tr('Пригласи друга', 'Досуңду чакыр'),
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        context.tr('Получи любой тест бесплатно', 'Каалаган тестти акысыз ал'),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: Colors.white.withValues(alpha: 0.85),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right_rounded, color: Colors.white),
+              ],
+            ),
+          ),
         ),
       ),
     );

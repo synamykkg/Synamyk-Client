@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:synamyk/config/app_config.dart';
 import 'package:synamyk/data/api/swagger/generated/synamyk_api.swagger.dart';
+import 'package:synamyk/data/api/dio/synamyk_rest_client.dart';
 import 'package:synamyk/data/api/synamyk_api_client.dart';
 import 'package:synamyk/data/interceptor/auth_interceptor.dart';
 import 'package:synamyk/data/repositories/auth/auth_repository.dart';
@@ -32,6 +33,7 @@ class AuthRepositoryImpl implements AuthRepository {
   final ImageStorage _imagePicker;
   final RegistrationTokenStorage _registrationTokenStorage;
   final SynamykApiClient synamykApi;
+  final SynamykRestClient restClient;
   final String policyUrl;
   final String termsOfService;
 
@@ -40,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
     UserRepository? userRepository,
     ImageStorage? imageStorage,
     required RegistrationTokenStorage registrationTokenStorage,
-    required this.synamykApi, required this.policyUrl, required this.termsOfService,
+    required this.synamykApi, required this.restClient, required this.policyUrl, required this.termsOfService,
   }) : _tokenStorage = tokenStorage ?? AppTokenStorage(),
        _userRepository = userRepository ?? GetIt.I<UserRepository>(),
        _imagePicker = imageStorage ?? ImageStorage(),
@@ -247,20 +249,23 @@ class AuthRepositoryImpl implements AuthRepository {
       if (token == null)
         throw AppException.unknown('Токен регистрации не найден');
 
-      final result = await synamykApi.registration.apiAuthCompleteProfilePost(
-        body: CompleteProfileRequest(
-          regionId: info.region,
-          firstName: info.firstName,
-          lastName: info.lastName,
-        ),
+      // Raw client: the generated CompleteProfileRequest has no
+      // schoolId/referralCode yet.
+      final referralCode = info.referralCode?.trim();
+      final response = await restClient.post(
+        '/api/auth/complete-profile',
+        tokenStorage: _registrationTokenStorage,
+        body: {
+          'regionId': info.region,
+          'firstName': info.firstName,
+          'lastName': info.lastName,
+          if (info.schoolId != null) 'schoolId': info.schoolId,
+          if (referralCode != null && referralCode.isNotEmpty)
+            'referralCode': referralCode,
+        },
       );
 
-      if (!result.isSuccessful) {
-        throw ExceptionParser.parseResponse(result.statusCode, result.error);
-      }
-
-      final body = result.body;
-      if (body == null) throw AppException.unknown('Пустой ответ');
+      final body = AuthResponse.fromJson(response.map);
       if (body.token == null || body.refreshToken == null) {
         throw AppException.unknown('Ошибка регистрации');
       }

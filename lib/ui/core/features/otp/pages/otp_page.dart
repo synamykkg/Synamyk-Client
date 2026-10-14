@@ -128,7 +128,7 @@ class OtpPage extends StatelessWidget {
                               text: 'Отправить код заново',
                               onTap: cubit.resend,
                               color: Colors.white,
-                              textColor: const Color(0xFF7B1FA2),
+                              textColor: const Color(0xFF6D35E0),
                             ),
                   ),
                 ],

@@ -168,7 +168,7 @@ class RadarPulse extends StatefulWidget {
     super.key,
     required this.child,
     this.size = 96,
-    this.color = const Color(0xFF7B1FA2),
+    this.color = const Color(0xFF6D35E0),
     this.ringCount = 3,
   });
 

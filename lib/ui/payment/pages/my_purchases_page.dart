@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -97,10 +98,13 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
     try {
       final repository = GetIt.I<PaymentRepository>();
       final isSubTestPurchase = entry.subTestId != null;
+      final productCode = entry.testId == null ? entry.product : null;
       final paymentInfo =
-          isSubTestPurchase
+          productCode != null
+              ? await repository.initPaymentForProduct(productCode)
+              : isSubTestPurchase
               ? await repository.initPaymentForSubTest(entry.subTestId!)
-              : await repository.initPaymentForTest(entry.testId);
+              : await repository.initPaymentForTest(entry.testId!);
       if (!mounted) return;
 
       await Navigator.of(context).push(
@@ -110,15 +114,24 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
                 paymentInfo: paymentInfo,
                 confirmArgs: PaymentConfirmArgs(
                   target:
-                      isSubTestPurchase
+                      productCode != null
+                          ? PaymentTarget.product
+                          : isSubTestPurchase
                           ? PaymentTarget.subTest
                           : PaymentTarget.test,
                   testId: entry.testId,
                   subTestId: entry.subTestId,
+                  productCode: productCode,
+                  returnLocation:
+                      productCode != null
+                          ? '/home'
+                          : isSubTestPurchase
+                          ? null
+                          : '/tests/${entry.testId}',
                   testTitle: entry.testTitle,
                   subTestTitle: entry.subTestTitle,
                   price: entry.amount,
-                  language: entry.testId.toString(),
+                  language: '${entry.testId ?? ''}',
                 ),
               ),
         ),
@@ -137,15 +150,10 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: BackButton(
-            color: Colors.black,
-            onPressed: () => context.pop(),
-          ),
-          title: Text('Мои покупки', style: AppTextStyles.appBarTitle),
-          centerTitle: true,
+        appBar: SyAppBar(
+          title: 'Мои покупки',
         ),
         body: _buildBody(),
       ),
@@ -191,8 +199,16 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
             entry: entry,
             isPaying: _payingId == entry.paymentId,
             onPay: () => _pay(entry),
-            onOpenTest:
-                () => context.push('/home/tests/${entry.testId}'),
+            onOpenTest: () {
+              final testId = entry.testId;
+              if (testId == null) {
+                context.go('/home');
+              } else if (entry.subTestId != null) {
+                context.push('/home/tests/$testId');
+              } else {
+                context.push('/tests/$testId');
+              }
+            },
           ),
         );
       },
@@ -240,7 +256,7 @@ class _PurchaseTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFEDF8F2),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -276,9 +292,13 @@ class _PurchaseTile extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             Text(
-              entry.subTestId != null ? 'Подтест' : 'Полный доступ',
+              entry.testId == null
+                  ? 'Пакет'
+                  : entry.subTestId != null
+                  ? 'Подтест'
+                  : 'Полный доступ',
               style: AppTextStyles.bodySmall.copyWith(
-                color: const Color(0xFF7B1FA2),
+                color: const Color(0xFF6D35E0),
               ),
             ),
             const SizedBox(height: 4),
@@ -305,7 +325,7 @@ class _PurchaseTile extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: isPaying ? null : onPay,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7B1FA2),
+                    backgroundColor: const Color(0xFF6D35E0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

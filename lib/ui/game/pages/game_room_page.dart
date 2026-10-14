@@ -7,6 +7,8 @@ import 'package:synamyk/data/repositories/game/game_repository.dart';
 import 'package:synamyk/data/repositories/profile/profile_repository.dart';
 import 'package:synamyk/data/services/game_socket_service.dart';
 import 'package:synamyk/domain/models/game/game_question.dart';
+import 'package:synamyk/ui/core/ui/widgets/figure/figure_view.dart';
+import 'package:synamyk/widgets/math_text.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/game/bloc/game_bloc.dart';
 import 'package:synamyk/ui/game/widgets/game_motion.dart';
@@ -90,8 +92,8 @@ class _GameRoomView extends StatelessWidget {
                       const SizedBox(height: 20),
                       _PillButton(
                         label: 'Назад',
-                        color: const Color(0xFF7B1FA2),
-                        background: const Color(0xFFF4E6FA),
+                        color: const Color(0xFF6D35E0),
+                        background: const Color(0xFFF0EAFE),
                         onTap: () async {
                           await context.read<GameBloc>().leaveRoom();
                           if (context.mounted) Navigator.of(context).pop();
@@ -110,11 +112,13 @@ class _GameRoomView extends StatelessWidget {
                         message.replaceAll(RegExp(r'\.+$'), ''),
                         style: AppTextStyles.bodyMedium,
                       ),
+                      const SizedBox(height: 8),
+                      const _SearchElapsed(),
                       const SizedBox(height: 24),
                       _PillButton(
                         label: 'Отменить',
-                        color: const Color(0xFF7B1FA2),
-                        background: const Color(0xFFF4E6FA),
+                        color: const Color(0xFF6D35E0),
+                        background: const Color(0xFFF0EAFE),
                         onTap: () async {
                           await context.read<GameBloc>().leaveRoom();
                           if (context.mounted) Navigator.of(context).pop();
@@ -131,6 +135,8 @@ class _GameRoomView extends StatelessWidget {
                   :final draw,
                   :final forfeitedByMe,
                   :final forfeitedByOpponent,
+                  :final ratingChange,
+                  :final newRating,
                 ) =>
                   _CenteredMessage(
                     child: TweenAnimationBuilder<double>(
@@ -182,6 +188,10 @@ class _GameRoomView extends StatelessWidget {
                             '$myScore : $opponentScore',
                             style: AppTextStyles.h2,
                           ),
+                          if (ratingChange != null) ...[
+                            const SizedBox(height: 16),
+                            _RatingChange(change: ratingChange, newRating: newRating),
+                          ],
                           const SizedBox(height: 24),
                           PressableScale(
                             onTap: () async {
@@ -193,7 +203,7 @@ class _GameRoomView extends StatelessWidget {
                               height: 48,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF7B1FA2),
+                                color: const Color(0xFF6D35E0),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Text(
@@ -254,7 +264,7 @@ class _WaitingVsRow extends StatelessWidget {
               height: 64,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFF7B1FA2),
+                color: Color(0xFF6D35E0),
               ),
               child: const Icon(Icons.person, color: Colors.white, size: 32),
             ),
@@ -276,13 +286,13 @@ class _WaitingVsRow extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color(0xFF7B1FA2).withOpacity(0.4),
+                    color: const Color(0xFF6D35E0).withOpacity(0.4),
                     width: 2,
                   ),
                 ),
                 child: const Icon(
                   Icons.question_mark_rounded,
-                  color: Color(0xFF7B1FA2),
+                  color: Color(0xFF6D35E0),
                   size: 28,
                 ),
               ),
@@ -335,7 +345,7 @@ class _GameQuestionView extends StatelessWidget {
                         minHeight: 6,
                         backgroundColor: const Color(0xFFE0E0E0),
                         valueColor: const AlwaysStoppedAnimation(
-                          Color(0xFF7B1FA2),
+                          Color(0xFF6D35E0),
                         ),
                       ),
                     ),
@@ -365,7 +375,11 @@ class _GameQuestionView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(state.question.text, style: AppTextStyles.h3),
+                    MathText(state.question.text, style: AppTextStyles.h3),
+                    if (state.question.figure != null) ...[
+                      const SizedBox(height: 12),
+                      FigureView(figure: state.question.figure!),
+                    ],
                     if (state.question.imageUrl != null) ...[
                       const SizedBox(height: 12),
                       ClipRRect(
@@ -455,7 +469,7 @@ class _ScoreHeader extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              const _PlayerBadge(icon: Icons.person, color: Color(0xFF7B1FA2)),
+              const _PlayerBadge(icon: Icons.person, color: Color(0xFF6D35E0)),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -480,14 +494,14 @@ class _ScoreHeader extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 8),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: const Color(0xFFEDF8F2),
+            color: const Color(0xFFFFFFFF),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             'VS',
             style: AppTextStyles.bodySmall.copyWith(
               fontWeight: FontWeight.w700,
-              color: const Color(0xFF7B1FA2),
+              color: const Color(0xFF6D35E0),
             ),
           ),
         ),
@@ -564,10 +578,10 @@ class _OptionTile extends StatelessWidget {
     final isSelected = state.selectedOptionId == option.id;
     final answered = state.selectedOptionId != null;
 
-    Color background = const Color(0xFFEDF8F2);
+    Color background = const Color(0xFFFFFFFF);
     Color border = const Color(0xFF252525).withOpacity(0.1);
-    Color badgeColor = const Color(0xFF7B1FA2);
-    Color badgeBackground = const Color(0xFFF4E6FA);
+    Color badgeColor = const Color(0xFF6D35E0);
+    Color badgeBackground = const Color(0xFFF0EAFE);
     IconData? statusIcon;
 
     if (isSelected) {
@@ -584,8 +598,8 @@ class _OptionTile extends StatelessWidget {
         badgeBackground = Colors.white;
         statusIcon = Icons.close_rounded;
       } else {
-        background = const Color(0xFFEDE0F5);
-        border = const Color(0xFF7B1FA2);
+        background = const Color(0xFFF0EAFE);
+        border = const Color(0xFF6D35E0);
       }
     }
 
@@ -639,7 +653,7 @@ class _OptionTile extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(option.text, style: AppTextStyles.bodyLarge),
+              child: MathText(option.text, style: AppTextStyles.bodyLarge),
             ),
             if (awaitingResult) ...[
               const SizedBox(width: 8),
@@ -702,7 +716,7 @@ class _QuestionTimerState extends State<_QuestionTimer> {
   @override
   Widget build(BuildContext context) {
     final urgent = _remaining <= 5;
-    final color = urgent ? Colors.red : const Color(0xFF7B1FA2);
+    final color = urgent ? Colors.red : const Color(0xFF6D35E0);
     final progress =
         widget.timeLimitSeconds == 0
             ? 0.0
@@ -794,6 +808,100 @@ class _PillButton extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// «+12» / «−9» with the new rating counting up from the old one.
+class _RatingChange extends StatelessWidget {
+  const _RatingChange({required this.change, required this.newRating});
+
+  final int change;
+  final int? newRating;
+
+  @override
+  Widget build(BuildContext context) {
+    final color =
+        change > 0
+            ? const Color(0xFF16A34A)
+            : change < 0
+            ? const Color(0xFFDC2626)
+            : const Color(0xFF94A3B8);
+    final sign = change > 0 ? '+' : change < 0 ? '−' : '±';
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            change >= 0 ? Icons.trending_up_rounded : Icons.trending_down_rounded,
+            color: color,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '$sign${change.abs()}',
+            style: AppTextStyles.h3.copyWith(color: color, fontWeight: FontWeight.w800),
+          ),
+          if (newRating != null) ...[
+            const SizedBox(width: 14),
+            TweenAnimationBuilder<double>(
+              tween: Tween(
+                begin: (newRating! - change).toDouble(),
+                end: newRating!.toDouble(),
+              ),
+              duration: const Duration(milliseconds: 1200),
+              curve: Curves.easeOutCubic,
+              builder:
+                  (_, v, _) => Text(
+                    '${v.round()}',
+                    style: AppTextStyles.h3.copyWith(fontWeight: FontWeight.w700),
+                  ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Seconds spent looking for an opponent — after ~15 s a bot joins.
+class _SearchElapsed extends StatefulWidget {
+  const _SearchElapsed();
+
+  @override
+  State<_SearchElapsed> createState() => _SearchElapsedState();
+}
+
+class _SearchElapsedState extends State<_SearchElapsed> {
+  final _started = DateTime.now();
+  late final Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = DateTime.now().difference(_started).inSeconds;
+    return Text(
+      '${s ~/ 60}:${(s % 60).toString().padLeft(2, '0')}',
+      style: AppTextStyles.h3.copyWith(
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF6D35E0),
+        fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
   }

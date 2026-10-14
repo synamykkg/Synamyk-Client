@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:synamyk/ui/core/ui/themes/app_colors.dart';
+import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 
 class ButtonForAuth extends StatelessWidget {
   const ButtonForAuth({
@@ -21,35 +22,37 @@ class ButtonForAuth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: isLoading ? null : onTap,
-
-      child: Container(
+    final background = isValid ? color : const Color(0xFFDDE3EC);
+    final foreground = isValid ? textColor : AppColors.textMuted;
+    return Center(
+      child: SizedBox(
         width: 350,
-        height: 48,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: isValid ? color : Color(0xFFE5E5E5),
-        ),
-        child: Center(
-          child:
-              isLoading
+        height: 52,
+        child: Material(
+          color: background,
+          borderRadius: BorderRadius.circular(14),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: isLoading ? null : onTap,
+            child: Center(
+              child: isLoading
                   ? SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(textColor),
-                    ),
-                  )
+                      height: 22,
+                      width: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        valueColor: AlwaysStoppedAnimation<Color>(foreground),
+                      ),
+                    )
                   : Text(
-                    text,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: textColor,
+                      text,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: foreground,
+                      ),
                     ),
-                  ),
+            ),
+          ),
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:synamyk/data/repositories/ort_tests/ort_tests_repository.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_finish_result.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
@@ -39,6 +38,7 @@ class _SessionResultPageState extends State<SessionResultPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: Scaffold(
         body: Stack(
           children: [
@@ -63,14 +63,6 @@ class _SessionResultPageState extends State<SessionResultPage> {
                   id: widget.subTestId,
                 );
               },
-            ),
-            Positioned(
-              top: 4,
-              left: 4,
-              child: BackButton(
-                color: Colors.black,
-                onPressed: () => context.pop(),
-              ),
             ),
           ],
         ),

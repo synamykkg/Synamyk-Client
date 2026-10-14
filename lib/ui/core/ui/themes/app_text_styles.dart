@@ -99,9 +99,9 @@ abstract class AppTextStyles {
 
   // Home Page
   static TextStyle get homeTitle => h2Bold;
-  static TextStyle get homeTitleAccent => h2Bold.copyWith(color: Colors.purple);
+  static TextStyle get homeTitleAccent => h2Bold.copyWith(color: const Color(0xFF6D35E0));
   static TextStyle get ortCardTitle =>
-      h4.copyWith(color: const Color(0xFF3A005E));
+      h4.copyWith(color: const Color(0xFF0F172A));
   static TextStyle get ortCardDesc => caption; // Inter 10 w400 black
 
   // Profile Page
@@ -117,7 +117,7 @@ abstract class AppTextStyles {
   // ORT Test Page
   static TextStyle get buttonText => bodyMedium.copyWith(color: Colors.white);
   static TextStyle get buttonTextPurple =>
-      bodyMedium.copyWith(color: const Color(0xFF7B1FA2));
+      bodyMedium.copyWith(color: const Color(0xFF6D35E0));
   static TextStyle get questionTitle => h4;
   static TextStyle get questionText => bodyMedium; // Inter 14 w400
   static TextStyle get resultTitle => h1; // Inter 26 w500
@@ -127,7 +127,7 @@ abstract class AppTextStyles {
   static TextStyle get statLabel =>
       bodySmall.copyWith(color: const Color(0xFF666666));
   static TextStyle get modalText =>
-      bodySmall.copyWith(color: const Color(0xFF7B1FA2));
+      bodySmall.copyWith(color: const Color(0xFF6D35E0));
 
   // News Page
   static TextStyle get newsTitle => h4.copyWith(color: const Color(0xFF1A1A1A));
@@ -139,7 +139,7 @@ abstract class AppTextStyles {
   static TextStyle get editProfileButton => _base.copyWith(
     fontSize: 12,
     fontWeight: FontWeight.w400,
-    color: const Color(0xFF7B1FA2),
+    color: const Color(0xFF6D35E0),
     height: 1.0, // line-height: 100%
   );
 
@@ -176,6 +176,4 @@ abstract class AppTextStyles {
   );
 
   static TextStyle get authSubTitle => bodyMedium.copyWith();
-
-  
 }

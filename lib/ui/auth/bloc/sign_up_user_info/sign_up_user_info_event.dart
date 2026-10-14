@@ -20,3 +20,18 @@ class SignUpUserInfoRegionChanged extends SignUpUserInfoEvent {
 class SignUpUserInfoSubmit extends SignUpUserInfoEvent {}
 
 class SignUpUserInfoRegionGet extends SignUpUserInfoEvent {}
+
+class SignUpUserInfoDistrictChanged extends SignUpUserInfoEvent {
+  final District district;
+  SignUpUserInfoDistrictChanged(this.district);
+}
+
+class SignUpUserInfoSchoolChanged extends SignUpUserInfoEvent {
+  final School school;
+  SignUpUserInfoSchoolChanged(this.school);
+}
+
+class SignUpUserInfoReferralCodeChanged extends SignUpUserInfoEvent {
+  final String code;
+  SignUpUserInfoReferralCodeChanged(this.code);
+}

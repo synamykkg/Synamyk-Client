@@ -9,6 +9,9 @@ abstract class PaymentRepository {
   /// Buys a single sub-test independently of the rest of the test.
   Future<InitPaymentInfo> initPaymentForSubTest(int subTestId);
 
+  /// Buys a catalog product: `ALL_TESTS` or `ALL_TEXTS`.
+  Future<InitPaymentInfo> initPaymentForProduct(String productCode);
+
   /// Returns the raw payment status string (e.g. "PENDING", "COMPLETED", "FAILED").
   Future<String?> getPaymentStatus(String paymentId);
 

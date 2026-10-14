@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:synamyk/ui/core/ui/tr.dart';
+import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -31,42 +33,19 @@ class HomeTestsListPage extends StatelessWidget {
     final l10n = S.of(context);
 
     return Scaffold(
+      appBar: SyAppBar(
+        title: context.tr('Тренировка по разделам', 'Бөлүм боюнча машыгуу'),
+      ),
       body: BlocProvider(
-        create:
-            (context) =>
-                SubjectTestsBloc(repository: GetIt.I<HomeRepository>())
-                  ..add(GetSubjectTestsList(id: language)),
+        create: (context) =>
+            SubjectTestsBloc(repository: GetIt.I<HomeRepository>())
+              ..add(GetSubjectTestsList(id: language)),
         child: BlocBuilder<SubjectTestsBloc, SubjectTestsState>(
           builder: (context, state) {
             if (state is SubjectTestsLoaded) {
               return CustomScrollView(
                 slivers: [
-                  SliverAppBar(
-                    backgroundColor: Colors.white,
-                    snap: false,
-
-                    // App bar is not pinned at the top
-                    pinned: true,
-
-                    // App bar does not float
-                    floating: false,
-                    flexibleSpace: FlexibleSpaceBar(
-                      // Center the title in the app bar
-                      centerTitle: true,
-                      title: Text.rich(
-                        TextSpan(
-                          text: l10n.homeTests,
-                          style: AppTextStyles.homeTitle,
-                          children: [
-                            TextSpan(
-                              text: l10n.appName,
-                              style: AppTextStyles.homeTitleAccent,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
                   SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       return Padding(
@@ -88,9 +67,11 @@ class HomeTestsListPage extends StatelessWidget {
                                 },
                                 child: Container(
                                   width: 282,
-                                  constraints: const BoxConstraints(minHeight: 97),
+                                  constraints: const BoxConstraints(
+                                    minHeight: 97,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: Color(0xFFEDF8F2),
+                                    color: Color(0xFFFFFFFF),
                                     border: Border.all(
                                       color: Color(0xFF252525).withOpacity(0.1),
                                       width: 1,
@@ -126,10 +107,13 @@ class HomeTestsListPage extends StatelessWidget {
                                                   size: 15,
                                                 ),
                                                 Text(
-                                                  l10n.minutes(state.freeTests[index].minutes),
-                                                  style:
-                                                      AppTextStyles
-                                                          .testCardMetadata,
+                                                  l10n.minutes(
+                                                    state
+                                                        .freeTests[index]
+                                                        .minutes,
+                                                  ),
+                                                  style: AppTextStyles
+                                                      .testCardMetadata,
                                                 ),
                                               ],
                                             ),
@@ -141,45 +125,75 @@ class HomeTestsListPage extends StatelessWidget {
                                                   size: 15,
                                                 ),
                                                 Text(
-                                                  l10n.questions(state.freeTests[index].questions),
-                                                  style:
-                                                      AppTextStyles
-                                                          .testCardMetadata,
+                                                  l10n.questions(
+                                                    state
+                                                        .freeTests[index]
+                                                        .questions,
+                                                  ),
+                                                  style: AppTextStyles
+                                                      .testCardMetadata,
                                                 ),
                                               ],
                                             ),
                                           ],
                                         ),
-                                        if (state.freeTests[index].bestScore != null ||
-                                            state.freeTests[index].attemptsCount > 0) ...[
+                                        if (state.freeTests[index].bestScore !=
+                                                null ||
+                                            state
+                                                    .freeTests[index]
+                                                    .attemptsCount >
+                                                0) ...[
                                           const SizedBox(height: 8),
                                           Wrap(
                                             spacing: 8,
                                             runSpacing: 8,
                                             children: [
-                                              if (state.freeTests[index].bestScore != null)
+                                              if (state
+                                                      .freeTests[index]
+                                                      .bestScore !=
+                                                  null)
                                                 _CardActionChip(
                                                   icon: Icons.emoji_events,
-                                                  label: 'Лучший балл: ${state.freeTests[index].bestScore}',
-                                                  color: const Color(0xFF7B1FA2),
-                                                  background: const Color(0xFFF4E6FA),
+                                                  label:
+                                                      'Лучший балл: ${state.freeTests[index].bestScore}',
+                                                  color: const Color(
+                                                    0xFF6D35E0,
+                                                  ),
+                                                  background: const Color(
+                                                    0xFFF0EAFE,
+                                                  ),
                                                   onTap:
-                                                      state.freeTests[index].bestSessionId != null
-                                                          ? () => context.push(
-                                                            '/sessions/${state.freeTests[index].bestSessionId}/result',
-                                                            extra: {
-                                                              'testId': language,
-                                                              'subTestId': int.parse(state.freeTests[index].id),
-                                                            },
-                                                          )
-                                                          : null,
+                                                      state
+                                                              .freeTests[index]
+                                                              .bestSessionId !=
+                                                          null
+                                                      ? () => context.push(
+                                                          '/sessions/${state.freeTests[index].bestSessionId}/result',
+                                                          extra: {
+                                                            'testId': language,
+                                                            'subTestId': int.parse(
+                                                              state
+                                                                  .freeTests[index]
+                                                                  .id,
+                                                            ),
+                                                          },
+                                                        )
+                                                      : null,
                                                 ),
-                                              if (state.freeTests[index].attemptsCount > 0)
+                                              if (state
+                                                      .freeTests[index]
+                                                      .attemptsCount >
+                                                  0)
                                                 _CardActionChip(
                                                   icon: Icons.history,
-                                                  label: 'Попыток: ${state.freeTests[index].attemptsCount}',
-                                                  color: const Color(0xFF616161),
-                                                  background: const Color(0xFFE8E8E8),
+                                                  label:
+                                                      'Попыток: ${state.freeTests[index].attemptsCount}',
+                                                  color: const Color(
+                                                    0xFF616161,
+                                                  ),
+                                                  background: const Color(
+                                                    0xFFE8E8E8,
+                                                  ),
                                                   onTap: () {
                                                     context.push(
                                                       '/sub_tests/${state.freeTests[index].id}/history',
@@ -203,288 +217,265 @@ class HomeTestsListPage extends StatelessWidget {
                   ),
                   state.paidTests.isNotEmpty
                       ? SliverToBoxAdapter(
-                        child: Center(
-                          child: SizedBox(
-                            width: 347,
-                            child: Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Платные',
-                                    style: AppTextStyles.testCardTitle,
-                                  ),
-                                ],
+                          child: Center(
+                            child: SizedBox(
+                              width: 347,
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Платные',
+                                      style: AppTextStyles.testCardTitle,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
+                        )
                       : const SliverToBoxAdapter(child: SizedBox()),
                   state.paidTests.isNotEmpty
                       ? SliverToBoxAdapter(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics:
-                              const NeverScrollableScrollPhysics(), // важно!
-                          itemCount: state.paidTests.length,
-                          itemBuilder: (context, index) {
-                            final subTest = state.paidTests[index];
-                            final locked = !subTest.hasAccess;
-                            final freeBadge = _freeBadgeText(subTest);
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics:
+                                const NeverScrollableScrollPhysics(), // важно!
+                            itemCount: state.paidTests.length,
+                            itemBuilder: (context, index) {
+                              final subTest = state.paidTests[index];
+                              final locked = !subTest.hasAccess;
+                              final freeBadge = _freeBadgeText(subTest);
 
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: Center(
-                                child: Opacity(
-                                  opacity: locked ? 0.7 : 1,
-                                  child: Row(
-                                    spacing: 21,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      _LevelStatusIcon(
-                                        status:
-                                            locked
-                                                ? _LevelStatus.locked
-                                                : (freeBadge != null
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: Center(
+                                  child: Opacity(
+                                    opacity: locked ? 0.7 : 1,
+                                    child: Row(
+                                      spacing: 21,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        _LevelStatusIcon(
+                                          status: locked
+                                              ? _LevelStatus.locked
+                                              : (freeBadge != null
                                                     ? _LevelStatus.free
                                                     : _LevelStatus.unlocked),
-                                      ),
-                                      GestureDetector(
-                                        onTap:
-                                            locked
-                                                ? null
-                                                : () => context.go(
+                                        ),
+                                        GestureDetector(
+                                          onTap: locked
+                                              ? null
+                                              : () => context.go(
                                                   '/ort_test/$language/${subTest.id}',
                                                 ),
-                                        child: Container(
-                                          width: 282,
-                                          constraints: const BoxConstraints(minHeight: 97),
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFEDF8F2),
-                                            border: Border.all(
-                                              color: Color(
-                                                0xFF252525,
-                                              ).withOpacity(0.1),
-                                              width: 1,
+                                          child: Container(
+                                            width: 282,
+                                            constraints: const BoxConstraints(
+                                              minHeight: 97,
                                             ),
-                                            borderRadius: BorderRadius.circular(
-                                              16,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFFFFFFF),
+                                              border: Border.all(
+                                                color: Color(
+                                                  0xFF252525,
+                                                ).withOpacity(0.1),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
                                             ),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  subTest.level,
-                                                  style:
-                                                      AppTextStyles
-                                                          .testCardLabel,
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  subTest.title,
-                                                  style:
-                                                      AppTextStyles
-                                                          .testCardTitle,
-                                                ),
-                                                if (freeBadge != null) ...[
-                                                  const SizedBox(height: 4),
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                        0xFFE8F5E9,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            20,
-                                                          ),
-                                                    ),
-                                                    child: Text(
-                                                      freeBadge,
-                                                      style: AppTextStyles
-                                                          .testCardMetadata
-                                                          .copyWith(
-                                                            color: const Color(
-                                                              0xFF2E7D32,
-                                                            ),
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                    ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                12.0,
+                                              ),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    subTest.level,
+                                                    style: AppTextStyles
+                                                        .testCardLabel,
                                                   ),
-                                                ],
-                                                const SizedBox(height: 4),
-                                                Row(
-                                                  spacing: 10,
-                                                  children: [
-                                                    Row(
-                                                      spacing: 2,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.watch_later,
-                                                          size: 15,
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    subTest.title,
+                                                    style: AppTextStyles
+                                                        .testCardTitle,
+                                                  ),
+                                                  if (freeBadge != null) ...[
+                                                    const SizedBox(height: 4),
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 3,
+                                                          ),
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(
+                                                          0xFFE8F5E9,
                                                         ),
-                                                        Text(
-                                                          l10n.minutes(subTest.minutes),
-                                                          style:
-                                                              AppTextStyles
-                                                                  .testCardMetadata,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      spacing: 2,
-                                                      children: [
-                                                        Icon(
-                                                          Icons.question_mark,
-                                                          size: 15,
-                                                        ),
-                                                        Text(
-                                                          l10n.questions(subTest.questions),
-                                                          style:
-                                                              AppTextStyles
-                                                                  .testCardMetadata,
-                                                        ),
-                                                      ],
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              20,
+                                                            ),
+                                                      ),
+                                                      child: Text(
+                                                        freeBadge,
+                                                        style: AppTextStyles
+                                                            .testCardMetadata
+                                                            .copyWith(
+                                                              color:
+                                                                  const Color(
+                                                                    0xFF2E7D32,
+                                                                  ),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                      ),
                                                     ),
                                                   ],
-                                                ),
-                                                if (subTest.bestScore != null ||
-                                                    subTest.attemptsCount > 0) ...[
-                                                  const SizedBox(height: 8),
-                                                  Wrap(
-                                                    spacing: 8,
-                                                    runSpacing: 8,
+                                                  const SizedBox(height: 4),
+                                                  Row(
+                                                    spacing: 10,
                                                     children: [
-                                                      if (subTest.bestScore != null)
-                                                        _CardActionChip(
-                                                          icon: Icons.emoji_events,
-                                                          label: 'Лучший балл: ${subTest.bestScore}',
-                                                          color: const Color(0xFF7B1FA2),
-                                                          background: const Color(0xFFF4E6FA),
-                                                          onTap:
-                                                              subTest.bestSessionId != null
-                                                                  ? () => context.push(
-                                                                    '/sessions/${subTest.bestSessionId}/result',
-                                                                    extra: {
-                                                                      'testId': language,
-                                                                      'subTestId': int.parse(subTest.id),
-                                                                    },
-                                                                  )
-                                                                  : null,
-                                                        ),
-                                                      if (subTest.attemptsCount > 0)
-                                                        _CardActionChip(
-                                                          icon: Icons.history,
-                                                          label: 'Попыток: ${subTest.attemptsCount}',
-                                                          color: const Color(0xFF616161),
-                                                          background: const Color(0xFFE8E8E8),
-                                                          onTap: () {
-                                                            context.push(
-                                                              '/sub_tests/${subTest.id}/history',
-                                                              extra: language,
-                                                            );
-                                                          },
-                                                        ),
+                                                      Row(
+                                                        spacing: 2,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.watch_later,
+                                                            size: 15,
+                                                          ),
+                                                          Text(
+                                                            l10n.minutes(
+                                                              subTest.minutes,
+                                                            ),
+                                                            style: AppTextStyles
+                                                                .testCardMetadata,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        spacing: 2,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.question_mark,
+                                                            size: 15,
+                                                          ),
+                                                          Text(
+                                                            l10n.questions(
+                                                              subTest.questions,
+                                                            ),
+                                                            style: AppTextStyles
+                                                                .testCardMetadata,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ],
                                                   ),
-                                                ],
-                                                if (locked) ...[
-                                                  if (subTest.price > 0) ...[
-                                                    const SizedBox(height: 10),
-                                                    SizedBox(
-                                                      width: double.infinity,
-                                                      child: _BuyButton(
-                                                        label:
-                                                            'Купить тест — ${subTest.price.toStringAsFixed(0)} сом',
-                                                        onTap:
-                                                            () => context.push(
-                                                              '/payment',
-                                                              extra: PaymentConfirmArgs(
-                                                                target:
-                                                                    PaymentTarget
-                                                                        .subTest,
-                                                                testId:
-                                                                    int.parse(
-                                                                      language,
-                                                                    ),
-                                                                subTestId:
-                                                                    int.parse(
-                                                                      subTest
-                                                                          .id,
-                                                                    ),
-                                                                testTitle:
-                                                                    state
-                                                                        .testTitle,
-                                                                subTestTitle:
-                                                                    subTest
-                                                                        .title,
-                                                                price:
-                                                                    subTest
-                                                                        .price,
-                                                                language:
-                                                                    language,
-                                                              ),
+                                                  if (subTest.bestScore !=
+                                                          null ||
+                                                      subTest.attemptsCount >
+                                                          0) ...[
+                                                    const SizedBox(height: 8),
+                                                    Wrap(
+                                                      spacing: 8,
+                                                      runSpacing: 8,
+                                                      children: [
+                                                        if (subTest.bestScore !=
+                                                            null)
+                                                          _CardActionChip(
+                                                            icon: Icons
+                                                                .emoji_events,
+                                                            label:
+                                                                'Лучший балл: ${subTest.bestScore}',
+                                                            color: const Color(
+                                                              0xFF6D35E0,
                                                             ),
-                                                      ),
+                                                            background:
+                                                                const Color(
+                                                                  0xFFF0EAFE,
+                                                                ),
+                                                            onTap:
+                                                                subTest.bestSessionId !=
+                                                                    null
+                                                                ? () => context.push(
+                                                                    '/sessions/${subTest.bestSessionId}/result',
+                                                                    extra: {
+                                                                      'testId':
+                                                                          language,
+                                                                      'subTestId':
+                                                                          int.parse(
+                                                                            subTest.id,
+                                                                          ),
+                                                                    },
+                                                                  )
+                                                                : null,
+                                                          ),
+                                                        if (subTest
+                                                                .attemptsCount >
+                                                            0)
+                                                          _CardActionChip(
+                                                            icon: Icons.history,
+                                                            label:
+                                                                'Попыток: ${subTest.attemptsCount}',
+                                                            color: const Color(
+                                                              0xFF616161,
+                                                            ),
+                                                            background:
+                                                                const Color(
+                                                                  0xFFE8E8E8,
+                                                                ),
+                                                            onTap: () {
+                                                              context.push(
+                                                                '/sub_tests/${subTest.id}/history',
+                                                                extra: language,
+                                                              );
+                                                            },
+                                                          ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ],
-                                              ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
+                              );
+                            },
+                          ),
+                        )
                       : const SliverToBoxAdapter(child: SizedBox()),
                   if (state.price > 0 &&
                       state.paidTests.any((t) => !t.hasAccess))
                     SliverToBoxAdapter(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: GestureDetector(
-                            onTap:
-                                () => context.push(
-                                  '/payment',
-                                  extra: PaymentConfirmArgs(
-                                    target: PaymentTarget.test,
-                                    testId: int.parse(language),
-                                    testTitle: state.testTitle,
-                                    price: state.price,
-                                    language: language,
-                                  ),
-                                ),
-                            child: Text(
-                              'Открыть весь тест — ${state.price.toStringAsFixed(0)} сом',
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.testCardMetadata.copyWith(
-                                color: const Color(0xFF7B1FA2),
-                                fontWeight: FontWeight.w600,
-                                decoration: TextDecoration.underline,
-                              ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+                        child: SyButton(
+                          label:
+                              'Открыть тест — ${state.price.toStringAsFixed(0)} сом',
+                          icon: Icons.lock_open_rounded,
+                          onPressed: () => context.push(
+                            '/payment',
+                            extra: PaymentConfirmArgs(
+                              target: PaymentTarget.test,
+                              testId: int.parse(language),
+                              testTitle: state.testTitle,
+                              price: state.price,
+                              language: language,
+                              returnLocation: '/tests/$language',
                             ),
                           ),
                         ),
@@ -518,15 +509,19 @@ class _LevelStatusIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (Color background, Color foreground, IconData icon) = switch (status) {
+    final (
+      Color background,
+      Color foreground,
+      IconData icon,
+    ) = switch (status) {
       _LevelStatus.free => (
         const Color(0xFFE8F5E9),
         const Color(0xFF2E7D32),
         Icons.lock_open_rounded,
       ),
       _LevelStatus.unlocked => (
-        const Color(0xFFF4E6FA),
-        const Color(0xFF7B1FA2),
+        const Color(0xFFF0EAFE),
+        const Color(0xFF6D35E0),
         Icons.lock_open_rounded,
       ),
       _LevelStatus.locked => (
@@ -589,39 +584,12 @@ class _CardActionChip extends StatelessWidget {
               ),
             ),
             if (enabled)
-              Icon(Icons.chevron_right_rounded, size: 14, color: effectiveColor),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 14,
+                color: effectiveColor,
+              ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Filled purple CTA for buying a locked sub-test — the primary action on
-/// a locked level card.
-class _BuyButton extends StatelessWidget {
-  const _BuyButton({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFF7B1FA2),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.testCardMetadata.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:synamyk/data/repositories/payment/payment_repository.dart';
 import 'package:synamyk/ui/auth/widgets/button_for_auth.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/payment/models/payment_confirm_args.dart';
+import 'package:synamyk/utils/app_refresh.dart';
 
 /// Shown right after the Finik SDK reports a locally successful payment.
 ///
@@ -50,6 +51,12 @@ class _PaymentPollingPageState extends State<PaymentPollingPage> {
 
         if (status == 'COMPLETED') {
           if (!mounted) return;
+          AppRefresh.notifyPurchased();
+          final returnLocation = widget.args.returnLocation;
+          if (returnLocation != null) {
+            context.go(returnLocation);
+            return;
+          }
           // A sub-test purchase jumps straight into what was just bought;
           // a bundle purchase has no single sub-test to land on, so it
           // goes back to the (now-unlocked) test list instead.
@@ -101,7 +108,7 @@ class _PaymentPollingPageState extends State<PaymentPollingPage> {
                           ButtonForAuth(
                             isValid: true,
                             text: 'Проверить снова',
-                            color: const Color(0xFF7B1FA2),
+                            color: const Color(0xFF6D35E0),
                             textColor: Colors.white,
                             onTap: _poll,
                           ),
@@ -109,7 +116,8 @@ class _PaymentPollingPageState extends State<PaymentPollingPage> {
                           TextButton(
                             onPressed:
                                 () => context.go(
-                                  '/home/tests/${widget.args.language}',
+                                  widget.args.returnLocation ??
+                                      '/home/tests/${widget.args.language}',
                                 ),
                             child: const Text('Назад к тестам'),
                           ),

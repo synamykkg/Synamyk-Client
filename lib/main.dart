@@ -15,7 +15,13 @@ import 'package:synamyk/data/repositories/notifications/notifications_repository
 import 'package:synamyk/data/repositories/notifications/notifications_repository_impl.dart';
 import 'package:synamyk/data/services/push_notification_service.dart';
 import 'package:synamyk/data/api/dio/upload_data_source.dart';
+import 'package:synamyk/data/api/dio/synamyk_rest_client.dart';
 import 'package:synamyk/data/api/synamyk_api_client.dart';
+import 'package:synamyk/data/repositories/catalog/catalog_repository.dart';
+import 'package:synamyk/data/repositories/ort_attempt/ort_attempt_repository.dart';
+import 'package:synamyk/data/repositories/ort_attempt/ort_attempt_repository_impl.dart';
+import 'package:synamyk/data/repositories/referral/referral_repository.dart';
+import 'package:synamyk/data/repositories/school/school_repository.dart';
 import 'package:synamyk/data/helper/network/network_info.dart';
 import 'package:synamyk/data/helper/network/network_info_impl.dart';
 import 'package:synamyk/data/repositories/analyst/analyst_repository_impl.dart';
@@ -74,9 +80,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.white,
-      statusBarIconBrightness: Brightness.dark,
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
     ),
   );
 
@@ -121,6 +128,34 @@ void main() async {
 
   GetIt.I.registerLazySingleton<AppTokenStorage>(() => AppTokenStorage());
 
+  GetIt.I.registerLazySingleton<SynamykRestClient>(
+    () => SynamykRestClient(
+      dio: GetIt.I<Dio>(),
+      tokenStorage: GetIt.I<AppTokenStorage>(),
+      synamykApi: GetIt.I<SynamykApiClient>(),
+      languageCode: () => GetIt.I<LanguageRepository>().current.materialApp,
+    ),
+  );
+
+  GetIt.I.registerLazySingleton<OrtAttemptRepository>(
+    () => OrtAttemptRepositoryImpl(client: GetIt.I<SynamykRestClient>()),
+  );
+
+  GetIt.I.registerLazySingleton<CatalogRepository>(
+    () => CatalogRepositoryImpl(client: GetIt.I<SynamykRestClient>()),
+  );
+
+  GetIt.I.registerLazySingleton<SchoolRepository>(
+    () => SchoolRepositoryImpl(
+      client: GetIt.I<SynamykRestClient>(),
+      languageCode: () => GetIt.I<LanguageRepository>().current.apiCode,
+    ),
+  );
+
+  GetIt.I.registerLazySingleton<ReferralRepository>(
+    () => ReferralRepositoryImpl(client: GetIt.I<SynamykRestClient>()),
+  );
+
   GetIt.I.registerLazySingleton<RegistrationTokenStorage>(
     () => RegistrationTokenStorage(),
   );
@@ -130,6 +165,8 @@ void main() async {
       tokenStorage: GetIt.I<AppTokenStorage>(),
 
       synamykApi: GetIt.I<SynamykApiClient>(),
+
+      restClient: GetIt.I<SynamykRestClient>(),
 
       registrationTokenStorage: GetIt.I<RegistrationTokenStorage>(),
 
@@ -202,7 +239,10 @@ void main() async {
   GetIt.I.registerLazySingleton<ImageRepository>(() => ImageRepositoryImpl());
 
   GetIt.I.registerLazySingleton<PaymentRepository>(
-    () => PaymentRepositoryImpl(synamykApi: GetIt.I<SynamykApiClient>()),
+    () => PaymentRepositoryImpl(
+      synamykApi: GetIt.I<SynamykApiClient>(),
+      restClient: GetIt.I<SynamykRestClient>(),
+    ),
   );
 
   GetIt.I.registerLazySingleton<GameRepository>(
