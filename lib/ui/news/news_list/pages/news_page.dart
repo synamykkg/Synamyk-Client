@@ -6,6 +6,7 @@ import 'package:synamyk/generated/l10n.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/data/repositories/news/news_repository.dart';
 import 'package:synamyk/ui/news/news_list/bloc/news_bloc.dart';
+import 'package:synamyk/ui/ort_attempt/widgets/ort_format.dart';
 
 class NewsPage extends StatelessWidget {
   const NewsPage({super.key});
@@ -97,7 +98,11 @@ class NewsPage extends StatelessWidget {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           Text(
-                                            state.newsLists[index].date,
+                                            formatDate(
+                                              DateTime.tryParse(
+                                                state.newsLists[index].date,
+                                              ),
+                                            ),
                                             style: AppTextStyles.newsDate,
                                           ),
                                         ],

@@ -15,8 +15,11 @@ class AppAuthLogoutRequested extends AppAuthEvent {}
 class AppAuthLoggedIn
     extends AppAuthEvent {} // Triggered when sign in/up succeeds
 
+/// "Continue without an account": browse the catalog, news and rating.
+class AppAuthGuestRequested extends AppAuthEvent {}
+
 // States
-enum AppAuthStatus { unknown, authenticated, unauthenticated }
+enum AppAuthStatus { unknown, authenticated, unauthenticated, guest }
 
 class AppAuthState {
   final AppAuthStatus status;
@@ -28,6 +31,7 @@ class AppAuthState {
     : this._(status: AppAuthStatus.authenticated);
   const AppAuthState.unauthenticated()
     : this._(status: AppAuthStatus.unauthenticated);
+  const AppAuthState.guest() : this._(status: AppAuthStatus.guest);
 }
 
 // Bloc
@@ -40,6 +44,9 @@ class AppAuthBloc extends Bloc<AppAuthEvent, AppAuthState> {
     on<AppAuthCheckRequested>(_onAuthCheckRequested);
     on<AppAuthLogoutRequested>(_onLogoutRequested);
     on<AppAuthLoggedIn>(_onLoggedIn);
+    on<AppAuthGuestRequested>(
+      (event, emit) => emit(const AppAuthState.guest()),
+    );
   }
 
   Future<void> _onAuthCheckRequested(

@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:synamyk/ui/core/ui/tr.dart';
 import 'package:synamyk/ui/core/ui/widgets/sy_components.dart';
@@ -458,7 +459,8 @@ class HomeTestsListPage extends StatelessWidget {
                           ),
                         )
                       : const SliverToBoxAdapter(child: SizedBox()),
-                  if (state.price > 0 &&
+                  if (AppConfig.paymentsEnabled &&
+                      state.price > 0 &&
                       state.paidTests.any((t) => !t.hasAccess))
                     SliverToBoxAdapter(
                       child: Padding(

@@ -233,6 +233,16 @@ class SignUpPage extends StatelessWidget {
                       child: Text("Есть аккаунт? Войти"),
                     ),
                   ),
+                  SliverToBoxAdapter(
+                    child: TextButton(
+                      onPressed: () {
+                        GetIt.I<AppAuthBloc>().add(AppAuthGuestRequested());
+                        context.go('/home');
+                      },
+                      style: TextButton.styleFrom(foregroundColor: Colors.grey),
+                      child: Text("Продолжить без входа"),
+                    ),
+                  ),
                 ],
               ),
             ),

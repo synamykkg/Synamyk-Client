@@ -268,7 +268,11 @@ void main() async {
     ),
   );
 
-  await GetIt.I<PushNotificationService>().init();
+  // SCREENSHOT_MODE is only set by the store-screenshot integration test,
+  // so the system permission dialog doesn't cover the captured screens.
+  if (!const bool.fromEnvironment('SCREENSHOT_MODE')) {
+    await GetIt.I<PushNotificationService>().init();
+  }
 
   runApp(SynamykApp(prefs: prefs));
 

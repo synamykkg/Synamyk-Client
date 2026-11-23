@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -203,7 +204,7 @@ class _TestDetailPageState extends State<TestDetailPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              if (test.price > 0) ...[
+              if (AppConfig.paymentsEnabled && test.price > 0) ...[
                 SyButton(
                   label: ctx.tr(
                     'Купить тест — ${formatSom(test.price)}',
@@ -215,7 +216,9 @@ class _TestDetailPageState extends State<TestDetailPage> {
                 ),
                 const SizedBox(height: 10),
               ],
-              if (allTests != null && allTests.canBuy) ...[
+              if (AppConfig.paymentsEnabled &&
+                  allTests != null &&
+                  allTests.canBuy) ...[
                 SyButton(
                   label: ctx.tr(
                     'Все тесты — ${formatSom(allTests.price)}',

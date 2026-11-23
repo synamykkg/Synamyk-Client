@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -556,17 +557,19 @@ class _SectionsCardState extends State<_SectionsCard> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        Expanded(
-                          child: SyButton(
-                            label: context.tr('Разбор с ИИ', 'ИИ менен талдоо'),
-                            icon: Icons.auto_awesome_rounded,
-                            style: SyButtonStyle.secondary,
-                            height: 40,
-                            loading: _loadingSessionId == s.sessionId,
-                            onPressed: () => _analyze(s),
+                        if (AppConfig.aiAnalysisEnabled) ...[
+                          Expanded(
+                            child: SyButton(
+                              label: context.tr('Разбор с ИИ', 'ИИ менен талдоо'),
+                              icon: Icons.auto_awesome_rounded,
+                              style: SyButtonStyle.secondary,
+                              height: 40,
+                              loading: _loadingSessionId == s.sessionId,
+                              onPressed: () => _analyze(s),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
+                          const SizedBox(width: 8),
+                        ],
                         Expanded(
                           child: SyButton(
                             label: context.tr('Мои ответы', 'Жооптарым'),

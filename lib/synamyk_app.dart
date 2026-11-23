@@ -39,6 +39,9 @@ class SynamykApp extends StatelessWidget {
           return Builder(
             builder: (context) {
               return MaterialApp.router(
+                // Hidden for store screenshots (release builds never show it).
+                debugShowCheckedModeBanner:
+                    !const bool.fromEnvironment('SCREENSHOT_MODE'),
                 locale: langState.locale,
                 supportedLocales: const [
                   Locale('en'),

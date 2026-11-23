@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:synamyk/domain/models/ort_test/ort_sub_test_finish_result.dart';
@@ -290,7 +291,7 @@ class _OrtTestResultsModalState extends State<_OrtTestResultsModal> {
     final l10n = S.of(context);
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: Padding(
+        bottomNavigationBar: !AppConfig.aiAnalysisEnabled ? null : Padding(
           padding: const EdgeInsets.all(16.0),
           child: SyButton(
             label: l10n.analyzeWithAi,

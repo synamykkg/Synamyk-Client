@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -676,14 +677,16 @@ class ProfilePage extends StatelessWidget {
                                   '/profile/notification_settings',
                                 ),
                           ),
-                          const SizedBox(height: 12),
-                          _ProfileMenuItem(
-                            icon: Icons.receipt_long_rounded,
-                            iconColor: const Color(0xFF2E7D32),
-                            iconBackground: const Color(0xFFE8F5E9),
-                            label: 'Мои покупки',
-                            onTap: () => context.push('/profile/purchases'),
-                          ),
+                          if (AppConfig.paymentsEnabled) ...[
+                            const SizedBox(height: 12),
+                            _ProfileMenuItem(
+                              icon: Icons.receipt_long_rounded,
+                              iconColor: const Color(0xFF2E7D32),
+                              iconBackground: const Color(0xFFE8F5E9),
+                              label: 'Мои покупки',
+                              onTap: () => context.push('/profile/purchases'),
+                            ),
+                          ],
                           const SizedBox(height: 24),
                         ]),
                       ),

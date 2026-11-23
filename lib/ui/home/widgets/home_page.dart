@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -389,7 +390,10 @@ class _TestsTab extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
-          if (allTests != null && allTests.canBuy && !bannerDismissed) ...[
+          if (AppConfig.paymentsEnabled &&
+              allTests != null &&
+              allTests.canBuy &&
+              !bannerDismissed) ...[
             _UnlockBanner(
               text: context.tr(
                 'Откройте все тесты одним платежом',
@@ -714,7 +718,10 @@ class _TextsTabState extends State<_TextsTab> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
         children: [
-          if (allTexts != null && allTexts.canBuy && anyLocked) ...[
+          if (AppConfig.paymentsEnabled &&
+              allTexts != null &&
+              allTexts.canBuy &&
+              anyLocked) ...[
             _UnlockBanner(
               text: context.tr(
                 'Откройте все тексты для чтения одним платежом',
@@ -736,11 +743,13 @@ class _TextsTabState extends State<_TextsTab> {
           for (final text in texts) ...[
             SyCard(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              onTap: () => context.push(
-                text.hasAccess
-                    ? '/texts/${text.id}'
-                    : '/product/${ProductCodes.allTexts}',
-              ),
+              onTap: !text.hasAccess && !AppConfig.paymentsEnabled
+                  ? null
+                  : () => context.push(
+                        text.hasAccess
+                            ? '/texts/${text.id}'
+                            : '/product/${ProductCodes.allTexts}',
+                      ),
               child: Row(
                 children: [
                   const SyIconTile(icon: Icons.menu_book_rounded),

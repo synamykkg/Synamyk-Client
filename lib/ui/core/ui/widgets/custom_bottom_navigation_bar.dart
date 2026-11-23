@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:synamyk/ui/auth/bloc/app_auth_bloc.dart';
 import 'package:synamyk/ui/core/ui/themes/app_colors.dart';
 import 'package:synamyk/ui/core/ui/themes/app_text_styles.dart';
 import 'package:synamyk/ui/core/ui/tr.dart';
+
+/// Tabs from Games onwards (Games, Results, Profile) require an account.
+const _firstAccountOnlyTab = 2;
 
 /// Flat white tab bar: Негизги · Рейтинг · Оюндар · Жыйынтык · Профиль.
 /// Branch order must match the `StatefulShellRoute` in `router.dart`.
@@ -67,11 +72,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onTap:
-                      () => navigationShell.goBranch(
-                        i,
-                        initialLocation: i == current,
-                      ),
+                  onTap: () {
+                    // Guests only get Home and Rating; other tabs need an
+                    // account, so offer sign-in on top of the current tab.
+                    final isGuest =
+                        GetIt.I<AppAuthBloc>().state.status ==
+                        AppAuthStatus.guest;
+                    if (isGuest && i >= _firstAccountOnlyTab) {
+                      context.push('/sign_in');
+                      return;
+                    }
+                    navigationShell.goBranch(i, initialLocation: i == current);
+                  },
                   child: _NavItem(
                     icon: i == current ? items[i].$2 : items[i].$1,
                     label: items[i].$3,

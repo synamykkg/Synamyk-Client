@@ -1,3 +1,4 @@
+import 'package:synamyk/config/app_config.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -75,6 +76,14 @@ GoRouter createRouter(AppAuthBloc authBloc) {
           state.uri.path.startsWith('/auth');
 
       final isSplash = state.uri.path == '/splash';
+      final path = state.uri.path;
+      // Purchase screens are unreachable on iOS (see AppConfig.paymentsEnabled).
+      if (!AppConfig.paymentsEnabled &&
+          (path.startsWith('/payment') ||
+              path.startsWith('/product') ||
+              path == '/profile/purchases')) {
+        return '/home';
+      }
 
       // 2. If authenticated
       if (isAuthenticated) {
@@ -84,7 +93,21 @@ GoRouter createRouter(AppAuthBloc authBloc) {
         }
       }
 
-      // 3. If unauthenticated
+      // 3. Guests may browse the catalog, news and rating; everything that
+      // needs an account (tests, games, results, profile, payments) asks to
+      // sign in first.
+      if (authState.status == AppAuthStatus.guest) {
+        if (isSplash) return '/home';
+        final guestAllowed =
+            isLoggingIn ||
+            path == '/home' ||
+            path.startsWith('/feed') ||
+            path == '/news_details' ||
+            RegExp(r'^/tests/\d+$').hasMatch(path);
+        return guestAllowed ? null : '/sign_in';
+      }
+
+      // 4. If unauthenticated
       if (isUnauthenticated) {
         // If not on a login page, go to sign in
         if (!isLoggingIn) {
